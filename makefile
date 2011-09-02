@@ -11,21 +11,26 @@
 GCC	= gcc -pedantic -Wall -Wextra -Werror
 GCC_C89	= -std=c89
 GCC_C99	= -std=c99
+GCC_32	= -m32
+GCC_64	= -m64
 ICC	= icc -Wall -Werror
 ICC_C89	= -std=c89
 ICC_C99	= -std=c99
+ICC_32	= -m32
+ICC_64	= -m64
 SUNCC	= suncc -Xc -errwarn
 SUNCC_C89	= -xc99=none
 SUNCC_C99	= -xc99=all
+SUNCC_32	= -m32
+SUNCC_64	= -m64
 PATHCC	= pathcc -Wall -Werror
 PATHCC_C89	= -std=c89
 PATHCC_C99	= -std=c99
 TCC	= tcc -Wall -Werror
 TCC_C89	= 
-# nwcc uses the cpp preprocessor
-#NWCC	= nwcc
-#NWCC_C89	= -ansi
-#NWCC_C99	=
+NWCC	= nwcc
+NWCC_C89	= -ansi
+NWCC_C99	=
 
 # default target: the test
 default: test
@@ -37,15 +42,25 @@ tester	: tester.c c89stdint.h
 .PHONY	: test cctest
 # compiler test
 test	:
-	@$(MAKE) -s CC="$(GCC) $(GCC_C89)" cctest
-	@$(MAKE) -s CC="$(GCC) $(GCC_C99)" cctest
-	@$(MAKE) -s CC="$(ICC) $(ICC_C89)" cctest
-	@$(MAKE) -s CC="$(ICC) $(ICC_C99)" cctest
-	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C89)" cctest
-	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C99)" cctest
+	@$(MAKE) -s CC="$(GCC) $(GCC_C89) $(GCC_32)" cctest
+	@$(MAKE) -s CC="$(GCC) $(GCC_C99) $(GCC_32)" cctest
+	@$(MAKE) -s CC="$(GCC) $(GCC_C89) $(GCC_64)" cctest
+	@$(MAKE) -s CC="$(GCC) $(GCC_C99) $(GCC_64)" cctest
+#        icc -m32 requires another compiler binary
+#        @$(MAKE) -s CC="$(ICC) $(ICC_C89) $(ICC_32)" cctest
+#        @$(MAKE) -s CC="$(ICC) $(ICC_C99) $(ICC_32)" cctest
+	@$(MAKE) -s CC="$(ICC) $(ICC_C89) $(ICC_64)" cctest
+	@$(MAKE) -s CC="$(ICC) $(ICC_C99) $(ICC_64)" cctest
+	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C89) $(SUNCC_32)" cctest
+	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C99) $(SUNCC_32)" cctest
+	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C89) $(SUNCC_64)" cctest
+	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C99) $(SUNCC_64)" cctest
 	@$(MAKE) -s CC="$(PATHCC) $(PATHCC_C89)" cctest
 	@$(MAKE) -s CC="$(PATHCC) $(PATHCC_C99)" cctest
-	@$(MAKE) -s CC="$(TCC) $(TCC_C99)" cctest
+#        nwcc uses the gcc preprocessor
+#        @$(MAKE) -s CC="$(NWCC) $(NWCC_C89)" cctest
+#        @$(MAKE) -s CC="$(NWCC) $(NWCC_C99)" cctest
+	@$(MAKE) -s CC="$(TCC) $(TCC_C89)" cctest
 cctest	:
 	@if [ $$(which $(CC)) ]; then \
 		($(MAKE) -s -B tester && ./tester) \
