@@ -167,71 +167,39 @@ typedef unsigned _INT64_T uint64_t;
 
 #ifdef _C89STDINT_TEST
 /* Test the type definitions */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 
+#define TEST(TYPE, N) {					\
+        TYPE prev = 1, cur = 1;				\
+        int bits = 0;					\
+        do {						\
+            prev = cur;					\
+            cur += cur;					\
+            bits++;					\
+	} while (cur > prev && cur / 2 == prev);	\
+	assert(N == bits);				\
+    }
+
 int main(void)
 {
     /* test 8 bit type */
-    {
-        uint8_t prev = 1, cur = 1;
-        int bits = 0;
-
-        do {
-            prev = cur;
-            cur += cur;
-            bits++;
-        } while (cur > prev && cur / 2 == prev);
-
-        assert(8 == bits);
-    }
+    TEST(uint8_t, 8);
     printf(" 8 ");
 
     /* test 16 bit type */
-    {
-        uint16_t prev = 1, cur = 1;
-        int bits = 0;
-
-        do {
-            prev = cur;
-            cur += cur;
-            bits++;
-        } while (cur > prev && cur / 2 == prev);
-
-        assert(16 == bits);
-    }
+    TEST(uint16_t, 16);
     printf("16 ");
 
-    /* test 32bit type */
-    {
-        uint32_t prev = 1, cur = 1;
-        int bits = 0;
-
-        do {
-            prev = cur;
-            cur += cur;
-            bits++;
-        } while (cur > prev && cur / 2 == prev);
-
-        assert(32 == bits);
-    }
+    /* test 32 bit type */
+    TEST(uint32_t, 32);
     printf("32 ");
 
 #ifdef UINT64_MAX
     /* test 64bit type */
-    {
-        uint64_t prev = 1, cur = 1;
-        int bits = 0;
-
-        do {
-            prev = cur;
-            cur += cur;
-            bits++;
-        } while (cur > prev && cur / 2 == prev);
-
-        assert(64 == bits);
-    }
+    TEST(uint64_t, 64);
     printf("64 ");
 #else
     printf("   ");
