@@ -118,11 +118,11 @@
 #define _INT64_T int
 #elif ULONG_MAX == _64BITS
 #define _INT64_T long
-#endif /* ULONG_MAX == _64BITS */
-#endif /* ULONG_MAX > _56BITS */
-#endif /* ULONG_MAX > _48BITS */
-#endif /* ULONG_MAX > _40BITS */
-#endif /* ULONG_MAX > _32BITS */
+#endif                          /* ULONG_MAX == _64BITS */
+#endif                          /* ULONG_MAX > _56BITS */
+#endif                          /* ULONG_MAX > _48BITS */
+#endif                          /* ULONG_MAX > _40BITS */
+#endif                          /* ULONG_MAX > _32BITS */
 
 #ifdef _INT8_T
 typedef _INT8_T int8_t;
@@ -160,4 +160,4 @@ typedef unsigned _INT64_T uint64_t;
 #undef _INT64_T
 #endif
 
-#endif /* !C99 */
+#endif                          /* !C99 */
