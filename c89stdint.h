@@ -92,26 +92,32 @@
 #define _INT32_T long
 #endif
 
-/*
- * Gradually test bit width by increments of 8bits. If we have more
- * than N bits, we probably have at lease N+8 bits, then the
- * compiler must accept contants on N+8 bits.
- * This is needed because on a 32bit system, the preprocessor may
- * not support definitions like
- *   #define _64BITS 18446744073709551615UL
- * and the compilers don't handle consistently tests like
- *   #if (1UL << 63)
- *
- * TODO: use right-shift instead
- */
-#if ULONG_MAX > _32BITS
-#define _40BITS 1099511627775UL
-#if ULONG_MAX > _40BITS
-#define _48BITS 281474976710655UL
-#if ULONG_MAX > _48BITS
-#define _56BITS 72057594037927935UL
-#if ULONG_MAX > _56BITS
 /* 64 bits type */
+/*
+ * On a 32bit system, the preprocessor may not support definitions
+ * like
+ *   #define _64BITS 18446744073709551615UL
+ * because its integer constants use long type, which can be defined
+ * in 32 bits.
+ *
+ * We can't test the preprocessor integer type because compilers don't
+ * handle consistently tests like
+ *   #if (1UL << 63)
+ * and shift operations are undefined if the right operand is greater
+ * than or equal to the number of bits in the left expression's type
+ * (K&R2, p. 206).
+ *
+ * We gradually test the bit width by increments of 8bits:
+ * - if X >> N > 1,
+ * - then X has more than N+1 bits,
+ * - then X probably has at least N+9 bits,
+ * - then we can shift X by N+8 bits.
+ */
+#if ((ULONG_MAX >> 31 > 1) && (ULONG_MAX >> 39 > 1) && (ULONG_MAX >> 47 > 1) && (ULONG_MAX >> 55 > 1))
+/*
+ * ULONG_MAX probably has at least 64 bits, so the preprocessor
+ * supports 64bit integer constants.
+ */
 #define _64BITS 18446744073709551615UL
 #if UCHAR_MAX == _64BITS
 #define _INT64_T char
@@ -121,11 +127,8 @@
 #define _INT64_T int
 #elif ULONG_MAX == _64BITS
 #define _INT64_T long
-#endif                          /* ULONG_MAX == _64BITS */
-#endif                          /* ULONG_MAX > _56BITS */
-#endif                          /* ULONG_MAX > _48BITS */
-#endif                          /* ULONG_MAX > _40BITS */
-#endif                          /* ULONG_MAX > _32BITS */
+#endif
+#endif                          /* ULONG_MAX >> 55 > 1 */
 
 #ifdef _INT8_T
 typedef _INT8_T int8_t;
