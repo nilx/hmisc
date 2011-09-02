@@ -5,6 +5,19 @@
 # the copyright notice and this notice are preserved.  This file is
 # offered as-is, without any warranty.
 
+HDR	= xstdint.h
+SRC	= $(HDR:.h=.c)
+BIN	= $(SRC:.c=)
+
+# default target: the test
+default: test
+
+# test program compilation
+$(SRC)	: $(HDR)
+	cp $< $@
+$(BIN)	: $(SRC)
+	$(CC) -D_XSTDINT_TEST $< -I. -o $@
+
 ################################################
 # compilers
 
@@ -31,19 +44,6 @@ TCC_C89	=
 NWCC	= nwcc
 NWCC_C89	= -ansi
 NWCC_C99	=
-
-HDR	= c89stdint.h
-SRC	= $(HDR:.h=.c)
-BIN	= $(SRC:.c=)
-
-# default target: the test
-default: test
-
-# test program compilation
-$(SRC)	: $(HDR)
-	cp $< $@
-$(BIN)	: $(SRC)
-	$(CC) -D_C89STDINT_TEST $< -I. -o $@
 
 .PHONY	: test cctest
 # compiler test
@@ -85,7 +85,7 @@ distclean	: clean
 ################################################
 # extra tasks
 
-PROJECT	= c89stdint
+PROJECT	= xstdint
 DATE	= $(shell date -u +%Y%m%d)
 RELEASE_TAG   = 0.$(DATE)
 
@@ -99,7 +99,7 @@ beautify	: $(HDR)
 		&& rm $$FILE.$$$$; \
 	done
 # static code analysis
-lint	: $(SRC) $(HDR)
+lint	: $(SRC)
 	for FILE in $^; do \
 		clang --analyze -ansi -I. $$FILE || exit 1; done;
 	for FILE in $^; do \

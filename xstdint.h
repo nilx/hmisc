@@ -14,51 +14,13 @@
  */
 
 /**
- * @file c89stdint.h
+ * @file xstdint.h
  *
  * This file tries to provide the exact-width integer type definitions
  * specified in the C99 standard[1] for use with C89 (ANSI C). Only the
  * the exact-width type definitions (int8_t, int16_t, ...) and limits
- * (INT8_MAX, ...) are provided, not the min-width, fastest, other
- * limits, ... This file tries to rely only on C89 standards.
- *
- * pstdint.h[2] is another similar code, more ambitious (mode type
- * definitions, printf symbols). It uses compiler-specific macros.
- *
- * - if you write C99 code, you can #include <stdint.h> and
- *   explicitely select C99 in your compiler flags;
- * - if you write C89 code but you want exact-width types, you can
- *   #include <c89stdint.h> and scplicitely select C89 in your
- *   compiler flags;
- * - if you write some code that should be usable on a C89 or C99
- *   compiler and you exact-width types, you can #include
- *   <c89stdint.h> and it will use the C99 stdint.h when compiled on a
- *   C99 compiler.
- *
- * [1]http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/stdint.h.html
- * [2]http://www.azillionmonkeys.com/qed/pstdint.h
- *
- */
-
-#ifndef _C89STDINT_H_
-#define _C89STDINT_H_
-
-#if (! defined(__STDC__))
-/*
- * The compiler is not C89 compatible, we can't expect any reliable
- * behaviour, let's give up early.
- */
-#error The compiler needs to implement at least the C89 standard.
-#endif
-
-#if (defined (__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L))
-/* The file is processed by a C99 compiler, let's use stdint.h. */
-#include <stdint.h>
-
-#else
-/*
- * The file is processed by a C89 compiler, we can use type limits
- * specified by the C89 standard (K&R2 p. 257.)
+ * (INT8_MAX, ...) are provided, not the min-width, fastest, ...
+ * This file tries to rely only on standard C89 compiler behaviour.
  *
  * For the moment, we suppose that the machine uses binary
  * representations and two's complement. Signed and unsigned limits
@@ -67,14 +29,53 @@
  * - XXX_MAX = 1 << (N - 1) - 1
  * - XXX_MIN = - XXX_MAX
  *
- * C89 minimum magnitudes are
+ * C89 minimum magnitudes are (K&R2 p. 257)
  * - UCHAR_MAX >= 255 = 1 << 8 - 1
- * - USHRT_MAX >= 255 = 1 << 16 - 1
- * - UINT_MAX  >= 255 = 1 << 16 - 1
- * - ULONG_MAX >= 255 = 1 << 32 - 1
+ * - USHRT_MAX >= 65535 = 1 << 16 - 1
+ * - UINT_MAX  >= 65535 = 1 << 16 - 1
+ * - ULONG_MAX >= 4294967295 = 1 << 32 - 1
  *
- * Moreover, the preprocessor evaluation of #if lines uses long
- * arithmetics for integer constants. For clarity all the preprocessor
+ * pstdint.h[2] is another similar code, more ambitious (more type
+ * definitions, printf symbols). It uses compiler-specific macros.
+ *
+ * Usage:
+ * - if you write C99 code, you don't need xstdint.h, you can
+ *   #include <stdint.h> and select C99 mode in your compiler flags;
+ * - if you write C89 code but you want exact-width types, you can
+ *   #include <xstdint.h> and select C89 in your compiler flags;
+ * - if you write some code that should be usable on a C89 or C99
+ *   compiler and you want exact-width types, you can #include
+ *   <xstdint.h> and it will use the C99 stdint.h when compiled on a
+ *   C99 compiler.
+ *
+ * [1]http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/stdint.h.html
+ * [2]http://www.azillionmonkeys.com/qed/pstdint.h
+ *
+ */
+
+#ifndef _XSTDINT_H_
+#define _XSTDINT_H_
+
+#if (! defined(__STDC__))
+/*
+ * The compiler is not C89 compatible, we can't expect any reliable
+ * behaviour, let's give up early.
+ */
+#error The compiler needs to implement at least the C89 standard.
+
+#elif (defined (__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L))
+/*
+ * The file is processed by a C99 compiler, let's use stdint.h.
+ */
+#include <stdint.h>
+
+#else
+/*
+ * The file is processed by a C89 compiler, we can use type limits
+ * specified by the C89 standard.
+ *
+ * The preprocessor evaluation of #if lines uses long arithmetics for
+ * integer constants (K&R2, p. 232). For clarity all the preprocessor
  * integer constants are defined as unsigned long.
  */
 #include <limits.h>
@@ -181,9 +182,9 @@ typedef unsigned _INT64_T uint64_t;
 #undef _INT64_T
 #endif
 
-#endif                          /* !C99 */
+#endif                          /* C89 */
 
-#ifdef _C89STDINT_TEST
+#ifdef _XSTDINT_TEST
 /* Test the type definitions. */
 
 #include <stdlib.h>
@@ -225,6 +226,6 @@ int main(void)
 
     return EXIT_SUCCESS;
 }
-#endif                          /* _C89STDINT_TEST */
+#endif                          /* _XSTDINT_TEST */
 
-#endif                          /* !_C89STDINT_H_ */
+#endif                          /* !_XSTDINT_H_ */
