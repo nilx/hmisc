@@ -5,33 +5,6 @@
 # the copyright notice and this notice are preserved.  This file is
 # offered as-is, without any warranty.
 
-# source code, C language
-CSRC	= tester.c
-# header, C language
-CHDR	= c89stdint.h
-# source code, all languages (only C here)
-SRC	= $(CSRC)
-# object files (partial compilation)
-OBJ	= $(CSRC:.c=.o)
-# binary executable programs
-BIN	= $(CSRC:.c=)
-
-# default target: the example programs
-default: $(BIN)
-
-# C compilation
-tester	: tester.c c89stdint.h
-	$(CC) $< -I. -o $@
-
-# cleanup
-.PHONY	: clean distclean scrub
-clean	:
-	$(RM) $(OBJ)
-	$(RM) *.flag
-distclean	: clean
-	$(RM) $(BIN)
-	$(RM) -r srcdoc
-
 ################################################
 # compilers
 
@@ -44,14 +17,40 @@ ICC_C99	= -std=c99
 SUNCC	= suncc -Xc -errwarn
 SUNCC_C89	= -xc99=none
 SUNCC_C99	= -xc99=all
-TCC	= tcc -Wall -Werror
-TCC_C89	= 
-TCC_C99	= 
 NWCC	= nwcc
 NWCC_C89	= -ansi
+NWCC_C99	=
+TCC	= tcc -Wall -Werror
+TCC_C89	= 
 
-# default compiler
-CC	= cc -ansi
+# default target: the test
+default: test
+
+# test program compilation
+tester	: tester.c c89stdint.h
+	$(CC) $< -I. -o $@
+
+.PHONY	: test cctest
+# compiler test
+test	:
+	$(MAKE) CC="$(GCC) $(GCC_C89)" cctest
+	$(MAKE) CC="$(GCC) $(GCC_C99)" cctest
+	$(MAKE) CC="$(ICC) $(ICC_C89)" cctest
+	$(MAKE) CC="$(ICC) $(ICC_C99)" cctest
+	$(MAKE) CC="$(SUNCC) $(SUNCC_C89)" cctest
+	$(MAKE) CC="$(SUNCC) $(SUNCC_C99)" cctest
+	$(MAKE) CC="$(NWCC) $(NWCC_C89)" cctest
+	$(MAKE) CC="$(NWCC) $(NWCC_C99)" cctest
+	$(MAKE) CC="$(TCC) $(TCC_C99)" cctest
+	$(MAKE) distclean
+cctest	:
+	if [ $$(which $(CC)) ]; then $(MAKE) -B tester; ./tester; fi
+
+# cleanup
+.PHONY	: clean distclean
+clean	:
+	$(RM) tester
+distclean	: clean
 
 ################################################
 # extra tasks
@@ -60,10 +59,7 @@ PROJECT	= c89stdint
 DATE	= $(shell date -u +%Y%m%d)
 RELEASE_TAG   = 0.$(DATE)
 
-.PHONY	: srcdoc lint beautify test cctest release
-# source documentation
-srcdoc	: $(CSRC) $(CHDR)
-	doxygen doc/doxygen.conf
+.PHONY	: lint beautify release
 # code cleanup
 beautify	: $(CSRC) $(CHDR)
 	for FILE in $^; do \
@@ -79,18 +75,6 @@ lint	: $(CSRC) $(CHDR)
 	for FILE in $^; do \
 		splint -ansi-lib -weak -I. $$FILE || exit 1; done;
 	$(RM) *.plist
-# code tests
-test	:
-	$(MAKE) CC="$(GCC) $(GCC_C89)" cctest
-	$(MAKE) CC="$(GCC) $(GCC_C99)" cctest
-	$(MAKE) CC="$(ICC) $(ICC_C89)" cctest
-	$(MAKE) CC="$(ICC) $(ICC_C99)" cctest
-	$(MAKE) CC="$(SUNCC) $(SUNCC_C89)" cctest
-	$(MAKE) CC="$(SUNCC) $(SUNCC_C99)" cctest
-	$(MAKE) distclean
-cctest	:
-	$(MAKE) -B $(BIN)
-	./$(BIN)
 # release tarball
 release	: beautify lint test distclean
 	git archive --format=tar --prefix=$(PROJECT)-$(RELEASE_TAG)/ HEAD \

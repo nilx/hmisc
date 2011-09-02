@@ -128,7 +128,7 @@
 typedef _INT8_T int8_t;
 typedef unsigned _INT8_T uint8_t;
 #define INT8_MAX 127;
-#define INT8_MIN -127;
+#define INT8_MIN (-127);
 #define UINT8_MAX 255;
 #undef _INT8_T
 #endif
@@ -137,7 +137,7 @@ typedef unsigned _INT8_T uint8_t;
 typedef _INT16_T int16_t;
 typedef unsigned _INT16_T uint16_t;
 #define INT16_MAX 32767;
-#define INT16_MIN -32767;
+#define INT16_MIN (-32767);
 #define UINT16_MAX 65535;
 #undef _INT16_T
 #endif
@@ -146,7 +146,7 @@ typedef unsigned _INT16_T uint16_t;
 typedef _INT32_T int32_t;
 typedef unsigned _INT32_T uint32_t;
 #define INT32_MAX 2147483647;
-#define INT32_MIN -2147483647;
+#define INT32_MIN (-2147483647);
 #define UINT32_MAX 4294967295;
 #undef _INT32_T
 #endif
@@ -155,7 +155,7 @@ typedef unsigned _INT32_T uint32_t;
 typedef _INT64_T int64_t;
 typedef unsigned _INT64_T uint64_t;
 #define INT64_MAX 9223372036854775807;
-#define INT64_MIN -9223372036854775807;
+#define INT64_MIN (-9223372036854775807);
 #define UINT64_MAX 18446744073709551615;
 #undef _INT64_T
 #endif
