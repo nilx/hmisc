@@ -25,10 +25,13 @@
  *
  */
 
+#ifndef _C89STDINT_H_
+#define _C89STDINT_H_
+
 #if (! defined(__STDC__))
 /*
  * The compiler is not C89 compatible, we can't expect any reliable
- *  behaviour, let's give up early.
+ * behaviour, let's give up early.
  */
 #error The compiler needs to implement at least the C89 standard.
 #endif
@@ -161,3 +164,5 @@ typedef unsigned _INT64_T uint64_t;
 #endif
 
 #endif                          /* !C99 */
+
+#endif /* !_C89STDINT_H_ */
