@@ -32,12 +32,18 @@ NWCC	= nwcc
 NWCC_C89	= -ansi
 NWCC_C99	=
 
+HDR	= c89stdint.h
+SRC	= $(HDR:.h=.c)
+BIN	= $(SRC:.c=)
+
 # default target: the test
 default: test
 
 # test program compilation
-tester	: tester.c c89stdint.h
-	$(CC) -DCC="$(CC)" $< -I. -o $@
+$(SRC)	: $(HDR)
+	cp $< $@
+$(BIN)	: $(SRC)
+	$(CC) -D_C89STDINT_TEST $< -I. -o $@
 
 .PHONY	: test cctest
 # compiler test
@@ -63,7 +69,7 @@ test	:
 	@$(MAKE) -s CC="$(TCC) $(TCC_C89)" cctest
 cctest	:
 	@if [ $$(which $(CC)) ]; then \
-		($(MAKE) -s -B tester && ./tester) \
+		($(MAKE) -s -B $(BIN) && ./$(BIN)) \
 			&& echo passed: $(CC) \
 			|| echo FAILED: $(CC); \
 	fi
@@ -72,7 +78,8 @@ cctest	:
 # cleanup
 .PHONY	: clean distclean
 clean	:
-	$(RM) tester
+	$(RM) $(BIN)
+	$(RM) $(SRC)
 distclean	: clean
 
 ################################################
