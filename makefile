@@ -91,7 +91,7 @@ RELEASE_TAG   = 0.$(DATE)
 
 .PHONY	: lint beautify release
 # code cleanup
-beautify	: $(CSRC) $(CHDR)
+beautify	: $(HDR)
 	for FILE in $^; do \
 		expand $$FILE | sed 's/[ \t]*$$//' > $$FILE.$$$$ \
 		&& indent -kr -i4 -l78 -nut -nce -sob -sc \
@@ -99,7 +99,7 @@ beautify	: $(CSRC) $(CHDR)
 		&& rm $$FILE.$$$$; \
 	done
 # static code analysis
-lint	: $(CSRC) $(CHDR)
+lint	: $(SRC) $(HDR)
 	for FILE in $^; do \
 		clang --analyze -ansi -I. $$FILE || exit 1; done;
 	for FILE in $^; do \

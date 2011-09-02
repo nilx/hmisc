@@ -172,15 +172,15 @@ typedef unsigned _INT64_T uint64_t;
 #include <stdio.h>
 #include <assert.h>
 
-#define TEST(TYPE, N) {					\
-        TYPE prev = 1, cur = 1;				\
-        int bits = 0;					\
-        do {						\
-            prev = cur;					\
-            cur += cur;					\
-            bits++;					\
-	} while (cur > prev && cur / 2 == prev);	\
-	assert(N == bits);				\
+#define TEST(TYPE, N) {                                 \
+        TYPE prev = 1, cur = 1;                         \
+        int bits = 0;                                   \
+        do {                                            \
+            prev = cur;                                 \
+            cur += cur;                                 \
+            bits++;                                     \
+        } while (cur > prev && cur / 2 == prev);        \
+        assert(N == bits);                              \
     }
 
 int main(void)
@@ -207,6 +207,6 @@ int main(void)
 
     return EXIT_SUCCESS;
 }
-#endif /* _C89STDINT_TEST */
+#endif                          /* _C89STDINT_TEST */
 
-#endif /* !_C89STDINT_H_ */
+#endif                          /* !_C89STDINT_H_ */
