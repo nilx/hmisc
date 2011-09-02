@@ -17,34 +17,42 @@ ICC_C99	= -std=c99
 SUNCC	= suncc -Xc -errwarn
 SUNCC_C89	= -xc99=none
 SUNCC_C99	= -xc99=all
-NWCC	= nwcc
-NWCC_C89	= -ansi
-NWCC_C99	=
+PATHCC	= pathcc -Wall -Werror
+PATHCC_C89	= -std=c89
+PATHCC_C99	= -std=c99
 TCC	= tcc -Wall -Werror
 TCC_C89	= 
+# nwcc uses the cpp preprocessor
+#NWCC	= nwcc
+#NWCC_C89	= -ansi
+#NWCC_C99	=
 
 # default target: the test
 default: test
 
 # test program compilation
 tester	: tester.c c89stdint.h
-	$(CC) $< -I. -o $@
+	$(CC) -DCC="$(CC)" $< -I. -o $@
 
 .PHONY	: test cctest
 # compiler test
 test	:
-	$(MAKE) CC="$(GCC) $(GCC_C89)" cctest
-	$(MAKE) CC="$(GCC) $(GCC_C99)" cctest
-	$(MAKE) CC="$(ICC) $(ICC_C89)" cctest
-	$(MAKE) CC="$(ICC) $(ICC_C99)" cctest
-	$(MAKE) CC="$(SUNCC) $(SUNCC_C89)" cctest
-	$(MAKE) CC="$(SUNCC) $(SUNCC_C99)" cctest
-	$(MAKE) CC="$(NWCC) $(NWCC_C89)" cctest
-	$(MAKE) CC="$(NWCC) $(NWCC_C99)" cctest
-	$(MAKE) CC="$(TCC) $(TCC_C99)" cctest
-	$(MAKE) distclean
+	@$(MAKE) -s CC="$(GCC) $(GCC_C89)" cctest
+	@$(MAKE) -s CC="$(GCC) $(GCC_C99)" cctest
+	@$(MAKE) -s CC="$(ICC) $(ICC_C89)" cctest
+	@$(MAKE) -s CC="$(ICC) $(ICC_C99)" cctest
+	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C89)" cctest
+	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C99)" cctest
+	@$(MAKE) -s CC="$(PATHCC) $(PATHCC_C89)" cctest
+	@$(MAKE) -s CC="$(PATHCC) $(PATHCC_C99)" cctest
+	@$(MAKE) -s CC="$(TCC) $(TCC_C99)" cctest
 cctest	:
-	if [ $$(which $(CC)) ]; then $(MAKE) -B tester; ./tester; fi
+	@if [ $$(which $(CC)) ]; then \
+		($(MAKE) -s -B tester && ./tester) \
+			&& echo passed: $(CC) \
+			|| echo FAILED: $(CC); \
+	fi
+	@$(MAKE) -s distclean
 
 # cleanup
 .PHONY	: clean distclean
