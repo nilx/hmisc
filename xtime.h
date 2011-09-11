@@ -64,8 +64,6 @@
  * OS-DEPENDANT IMPLEMENTATION
  */
 
-#define _ul unsigned long       /* temporary, for shorter lines */
-
 #if defined(XTIME_WINDOWS)      /* Windows implementation */
 
 #define WIN32_LEAN_AND_MEAN
@@ -77,11 +75,13 @@ static unsigned long xtime()
 {
     static SYSTEMTIME t;
     GetSystemTime(&t);
+#define _ul unsigned long       /* temporary, for shorter lines */
     return (_ul) ((_ul) t.wMilliseconds
                   + 1000 * ((_ul) t.wSecond
                             + 60 * ((_ul) t.wMinute
                                     + 60 * ((ul) t.wHour
                                             + 24 * (_ul) t.wDay))));
+#undef _ul
 }
 
 #elif defined(XTIME_POSIX)      /* POSIX implementation */
@@ -113,14 +113,14 @@ static unsigned long xtime()
 
     time(&rawtime);
     t = localtime(&rawtime);
+#define _ul unsigned long       /* temporary, for shorter lines */
     return (_ul) (1000 * ((_ul) t->tm_sec
                           + 60 * ((_ul) t->tm_min +
                                   +60 * ((_ul) t->tm_hour +
                                          +24 * (_ul) t->tm_mday))));
+#undef _ul
 }
 
-#endif                          /* implementations */
-
-#undef _ul
+#endif                          /* implementation selection */
 
 #endif                          /* !_XTIME_H_ */
