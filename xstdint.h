@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2011, Pascal Getreuer <pascal.getreuer@cmla.ens-cachan.fr>
  * Copyright (c) 2011, Nicolas Limare <nicolas.limare@cmla.ens-cachan.fr>
  * All rights reserved.
  *
