@@ -2,21 +2,37 @@
 
 # OVERVIEW
 
-Cbits is a collection bits of C code, providing tiny tools and facilities:
-* xstdint.h: cross-platform definition of exact-width integers, in C89
-* debug.h: debugging and profiling routines
+Cbits is a collection bits of C code, providing tiny tools and
+facilities:
+
+xstdint.h:
+  Cross-platform definition of exact-width integers as defined in the
+  C99 standard but usable with C89.
+
+xtime.h:
+  Definition of a millisecond timer for Windows and POSIX. On other
+  systems, this precision timer is emulated with the standard libc
+  low-precision time functions.
+
+debug.h:
+  NDEBUG-aware printf macros and routines to measure cycles and CPU
+  time for profiling.
 
 # LICENSE
 
-See the source files.
+See each source file.
 
 # USAGE
 
-See the source files.
+These headers are written for a local use by header inclusion only. No
+need to compile, everything is local to the compilation unit (source
+file), just include the header you need where you need it.
+
+See each source file for derails.
 
 # TODO
 
-Add a test suite and usage example.
+Add a test suite and some examples.
 
 # ABOUT THIS FILE
 
