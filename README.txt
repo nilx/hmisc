@@ -34,6 +34,17 @@ See each source file for derails.
 
 Add a test suite and some examples.
 
+Add other bits of code:
+- xio.h: robust file handling
+  xmem.h robust memory allocation
+  cf. http://tools.ipol.im/wiki/author/code/fragments_in_c/)
+- qcmp.h: numeric type comparisons (for qsort)
+  see http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm
+- mt.h: mersenne twister, from http://dev.ipol.im/git/?p=nil/mt.git
+- bit twiddling, cf. http://bits.stephan-brumme.com/
+
+Rename to hbits, hcode, hsomething?
+
 # ABOUT THIS FILE
 
 Copyright 2011 Nicolas Limare <nicolas.limare@cmla.ens-cachan.fr>
