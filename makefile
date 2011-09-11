@@ -5,7 +5,7 @@
 # the copyright notice and this notice are preserved.  This file is
 # offered as-is, without any warranty.
 
-HDR	= xstdint.h
+HDR	= xstdint.h debug.h
 SRC	= $(HDR:.h=.c)
 BIN	= $(SRC:.c=)
 
@@ -18,8 +18,10 @@ $(SRC)	: $(HDR)
 $(BIN)	: $(SRC)
 	$(CC) -D_XSTDINT_TEST $< -I. -o $@
 
+test	: xstdint.test
+
 ################################################
-# compilers
+# xstdint test
 
 GCC	= gcc -pedantic -Wall -Wextra -Werror
 GCC_C89	= -std=c89
@@ -45,29 +47,29 @@ NWCC	= nwcc
 NWCC_C89	= -ansi
 NWCC_C99	=
 
-.PHONY	: test cctest
+.PHONY	: xstdint.test xstdint.cctest
 # compiler test
-test	:
-	@$(MAKE) -s CC="$(GCC) $(GCC_C89) $(GCC_32)" cctest
-	@$(MAKE) -s CC="$(GCC) $(GCC_C99) $(GCC_32)" cctest
-	@$(MAKE) -s CC="$(GCC) $(GCC_C89) $(GCC_64)" cctest
-	@$(MAKE) -s CC="$(GCC) $(GCC_C99) $(GCC_64)" cctest
+xstdint.test	:
+	@$(MAKE) -s CC="$(GCC) $(GCC_C89) $(GCC_32)" xstdint.cctest
+	@$(MAKE) -s CC="$(GCC) $(GCC_C99) $(GCC_32)" xstdint.cctest
+	@$(MAKE) -s CC="$(GCC) $(GCC_C89) $(GCC_64)" xstdint.cctest
+	@$(MAKE) -s CC="$(GCC) $(GCC_C99) $(GCC_64)" xstdint.cctest
 #        icc -m32 requires another compiler binary
-#        @$(MAKE) -s CC="$(ICC) $(ICC_C89) $(ICC_32)" cctest
-#        @$(MAKE) -s CC="$(ICC) $(ICC_C99) $(ICC_32)" cctest
-	@$(MAKE) -s CC="$(ICC) $(ICC_C89) $(ICC_64)" cctest
-	@$(MAKE) -s CC="$(ICC) $(ICC_C99) $(ICC_64)" cctest
-	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C89) $(SUNCC_32)" cctest
-	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C99) $(SUNCC_32)" cctest
-	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C89) $(SUNCC_64)" cctest
-	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C99) $(SUNCC_64)" cctest
-	@$(MAKE) -s CC="$(PATHCC) $(PATHCC_C89)" cctest
-	@$(MAKE) -s CC="$(PATHCC) $(PATHCC_C99)" cctest
+#        @$(MAKE) -s CC="$(ICC) $(ICC_C89) $(ICC_32)" xstdint.cctest
+#        @$(MAKE) -s CC="$(ICC) $(ICC_C99) $(ICC_32)" xstdint.cctest
+	@$(MAKE) -s CC="$(ICC) $(ICC_C89) $(ICC_64)" xstdint.cctest
+	@$(MAKE) -s CC="$(ICC) $(ICC_C99) $(ICC_64)" xstdint.cctest
+	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C89) $(SUNCC_32)" xstdint.cctest
+	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C99) $(SUNCC_32)" xstdint.cctest
+	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C89) $(SUNCC_64)" xstdint.cctest
+	@$(MAKE) -s CC="$(SUNCC) $(SUNCC_C99) $(SUNCC_64)" xstdint.cctest
+	@$(MAKE) -s CC="$(PATHCC) $(PATHCC_C89)" xstdint.cctest
+	@$(MAKE) -s CC="$(PATHCC) $(PATHCC_C99)" xstdint.cctest
 #        nwcc uses the gcc preprocessor
-#        @$(MAKE) -s CC="$(NWCC) $(NWCC_C89)" cctest
-#        @$(MAKE) -s CC="$(NWCC) $(NWCC_C99)" cctest
-	@$(MAKE) -s CC="$(TCC) $(TCC_C89)" cctest
-cctest	:
+#        @$(MAKE) -s CC="$(NWCC) $(NWCC_C89)" xstdint.cctest
+#        @$(MAKE) -s CC="$(NWCC) $(NWCC_C99)" xstdint.cctest
+	@$(MAKE) -s CC="$(TCC) $(TCC_C89)" xstdint.cctest
+xstdint.cctest	:
 	@if [ $$(which $(CC)) ]; then \
 		($(MAKE) -s -B $(BIN) && ./$(BIN)) \
 			&& echo passed: $(CC) \
@@ -85,7 +87,7 @@ distclean	: clean
 ################################################
 # extra tasks
 
-PROJECT	= xstdint
+PROJECT	= cbits
 DATE	= $(shell date -u +%Y%m%d)
 RELEASE_TAG   = 0.$(DATE)
 

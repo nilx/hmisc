@@ -14,6 +14,10 @@ See the source files.
 
 See the source files.
 
+# TODO
+
+Add a test suite and usage example.
+
 # ABOUT THIS FILE
 
 Copyright 2011 Nicolas Limare <nicolas.limare@cmla.ens-cachan.fr>
