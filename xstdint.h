@@ -130,7 +130,9 @@
  * - then X probably has at least N+9 bits,
  * - then we can shift X by N+8 bits.
  */
-#if ((ULONG_MAX >> 31 > 1) && (ULONG_MAX >> 39 > 1) && (ULONG_MAX >> 47 > 1) && (ULONG_MAX >> 55 > 1))
+/* shortcut: NBITS(N) is true if ULONG_MAX has more then N bits  */
+#define NBITS(N) (ULONG_MAX >> (N - 1) > 1)
+#if (NBITS(32) && NBITS(40) && NBITS(48) && NBITS(56))
 /*
  * ULONG_MAX probably has at least 64 bits, so the preprocessor
  * supports 64bit integer constants.
