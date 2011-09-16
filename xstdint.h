@@ -124,18 +124,22 @@
  * than or equal to the number of bits in the left expression's type
  * (K&R2, p. 206).
  *
- * We gradually test the bit width by increments of 8bits:
- * - if X >> N > 1,
- * - then X has more than N+1 bits,
- * - then X probably has at least N+9 bits,
- * - then we can shift X by N+8 bits.
+ * We gradually test the bit width by increments:
+ * - if (ULONG_MAX >> N) > 1,
+ * - then ULONG_MAX has N+1 bits or more,
+ * - then we can shift ULONG_MAX by N+1 bits.
  */
-/* shortcut: NBITS(N) is true if ULONG_MAX has more then N bits  */
-#define NBITS(N) (ULONG_MAX >> (N - 1) > 1)
-#if (NBITS(32) && NBITS(40) && NBITS(48) && NBITS(56))
 /*
- * ULONG_MAX probably has at least 64 bits, so the preprocessor
- * supports 64bit integer constants.
+ * shortcuts: NBITS(N) is true if ULONG_MAX has N bits or more
+ *            NBITS8(N) is true if ULONG_MAX has N+8 bits or more
+ */
+#define NBITS(N) ((ULONG_MAX >> (N)) > 1)
+#define NBITS8(N) (NBITS(N) && NBITS(N+1) && NBITS(N+2) && NBITS(N+3) \
+                   && NBITS(N+4) && NBITS(N+5) && NBITS(N+6) && NBITS(N+7))
+#if (NBITS8(31) && NBITS8(39) && NBITS8(47) && NBITS8(55))
+/*
+ * ULONG_MAX has at least 64 bits, so the preprocessor supports 64bit
+ * integer constants.
  */
 #define _64BITS 18446744073709551615UL
 #if UCHAR_MAX == _64BITS
@@ -147,7 +151,7 @@
 #elif ULONG_MAX == _64BITS
 #define _INT64_T long
 #endif
-#endif                          /* ULONG_MAX >> 55 > 1 */
+#endif                          /* ULONG_MAX has at least 64 bits */
 
 #ifdef _INT8_T
 typedef _INT8_T int8_t;
