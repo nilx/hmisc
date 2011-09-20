@@ -21,6 +21,9 @@ debug.h:
 qcmp.h:
   Numerical comparison functions for qsort().
 
+xmem.h:
+  Failsafe memory allocation.
+
 # LICENSE
 
 See each source file.
@@ -39,7 +42,6 @@ Add a test suite and some examples.
 
 Add other bits of code:
 - xio.h: robust file handling
-  xmem.h robust memory allocation
   cf. http://tools.ipol.im/wiki/author/code/fragments_in_c/)
 - mt.h: mersenne twister, from http://dev.ipol.im/git/?p=nil/mt.git
 - bit twiddling, cf. http://bits.stephan-brumme.com/
