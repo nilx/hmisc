@@ -182,7 +182,7 @@ static clock_t _dbg_clock_counter[DBG_CLOCK_NB];
  *   }
  *   qsort(cycles, large_number, sizeof(long long), &cmp);
  *   long long tmp = cycles[large_number / 2];
- *   
+ *
  *   for(i = 0; i < large_number; i++) {
  *     DBG_CYCLE_START(N)
  *     some_operations

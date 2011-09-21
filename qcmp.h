@@ -41,12 +41,12 @@
  * - qcmp_dbl()    double
  */
 #define CAST(TYPE, X) (*(const TYPE *) X)
-#define QCMP(FUNC, TYPE)				  \
-    static int FUNC(const void *a, const void *b)	  \
+#define QCMP(FUNC, TYPE)                                  \
+    static int FUNC(const void *a, const void *b)         \
     {                                                     \
         return (int) ((CAST(TYPE, a) > CAST(TYPE, b))     \
                       - (CAST(TYPE, a) < CAST(TYPE, b))); \
-    }							  \
+    }                                                     \
     static int FUNC(const void *a, const void *b)
 
 /**
