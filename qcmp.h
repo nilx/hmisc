@@ -15,15 +15,17 @@
 
 /**
  * @file qcmp.h
- * @brief numeric comparison functions for qsort()
+ * @brief numeric comparison functions and type-safe shortcuts to qsort()
  *
  * @author Nicolas Limare <nicolas.limare@cmla.ens-cachan.fr>
  *
- * @todo try some optimizarions by bit twiddling
+ * @todo try some optimizations by bit twiddling
  */
 
 #ifndef _QCMP_H
 #define _QCMP_H
+
+#include <stdlib.h>
 
 /**
  * macros to define similar functions:
@@ -40,6 +42,11 @@
  * - qcmp_flt()    float
  * - qcmp_dbl()    double
  */
+/*
+ * The last line it results in a declaration when QCMP(FOO, BAR); is
+ * expanded. This is not really useful, but it maintains a correct
+ * indentation when processing the source with the indent program.
+ */
 #define CAST(TYPE, X) (*(const TYPE *) X)
 #define QCMP(FUNC, TYPE)                                  \
     static int FUNC(const void *a, const void *b)         \
@@ -50,40 +57,49 @@
     static int FUNC(const void *a, const void *b)
 
 /**
- * unsigned integer comparison
- *
- * qcmp_char()
- * qcmp_shrt()
- * qcmp_int()
- * qcmp_long()
+ * define all the qcmp variants
  */
 QCMP(qcmp_char, char);
 QCMP(qcmp_shrt, short);
 QCMP(qcmp_int, int);
 QCMP(qcmp_long, long);
-
-/**
- * unsigned integer comparison
- *
- * qcmp_uchar()
- * qcmp_ushort()
- * qcmp_uint()
- * qcmp_ulong()
- */
 QCMP(qcmp_uchar, unsigned char);
 QCMP(qcmp_ushrt, unsigned short);
 QCMP(qcmp_uint, unsigned int);
 QCMP(qcmp_ulong, unsigned long);
-
-/**
- * floating-point comparison
- *
- * qcmp_flt()
- * qcmp_dbl()
- */
 QCMP(qcmp_flt, float);
 QCMP(qcmp_dbl, double);
 
 #undef QCMP
 #undef CAST
+
+/**
+ * macros to define similar shortcut functions:
+ *   static void qsort_XXX(TYPE *base, size_t n)
+ * where the suffix defines the type of the scalars to be sorted.
+ */
+
+#define QSORT(FUNC, CMP, TYPE)                           \
+    static void FUNC(TYPE *base, size_t n)               \
+    {                                                    \
+        qsort((void *) base, n, sizeof(TYPE), CMP);      \
+    }                                                    \
+    static void FUNC(TYPE *base, size_t n)
+
+/**
+ * define all the qsort variants
+ */
+QSORT(qsort_char, qcmp_char, char);
+QSORT(qsort_shrt, qcmp_shrt, short);
+QSORT(qsort_int, qcmp_int, int);
+QSORT(qsort_long, qcmp_long, long);
+QSORT(qsort_uchar, qcmp_uchar, unsigned char);
+QSORT(qsort_ushrt, qcmp_ushrt, unsigned short);
+QSORT(qsort_uint, qcmp_uint, unsigned int);
+QSORT(qsort_ulong, qcmp_ulong, unsigned long);
+QSORT(qsort_flt, qcmp_flt, float);
+QSORT(qsort_dbl, qcmp_dbl, double);
+
+#undef QSORT
+
 #endif                          /* !_QCMP_H */
