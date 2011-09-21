@@ -13,7 +13,7 @@ BIN	= $(SRC:.c=)
 default: test
 
 # test program compilation
-$(SRC)	: $(HDR)
+%.c	: %.h
 	cp $< $@
 $(BIN)	: $(SRC)
 	$(CC) -D_XSTDINT_TEST $< -I. -o $@
@@ -102,10 +102,11 @@ beautify	: $(HDR)
 	done
 # static code analysis
 lint	: $(SRC)
+#	for FILE in $^; do \
+#		clang --analyze -ansi -I. $$FILE || exit 1; done;
 	for FILE in $^; do \
-		clang --analyze -ansi -I. $$FILE || exit 1; done;
-	for FILE in $^; do \
-		splint -ansi-lib -weak -I. $$FILE || exit 1; done;
+		splint -ansi-lib -weak -fcnuse -varuse -I. $$FILE \
+		|| exit 1; done;
 	$(RM) *.plist
 # release tarball
 release	: beautify lint test distclean

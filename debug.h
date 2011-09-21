@@ -41,12 +41,16 @@
  *
  * Variadic macros are not ANSI C89, so we define a set of macros with
  * a fixed number of arguments.
+ *
+ * Use like printf():
+ * DBG_PRINTF("entering function foo()\n");
+ * DBG_PRINTF2("i=%i, j=%i\n", i, j);
  */
 #define DBG_PRINTF0(STR) {printf(STR);}
 #define DBG_PRINTF1(STR, A1) {printf(STR, A1);}
-#define DBG_PRINTF2(STR, A1) {printf(STR, A1, A2);}
-#define DBG_PRINTF3(STR, A1) {printf(STR, A1, A2, A3);}
-#define DBG_PRINTF4(STR, A1) {printf(STR, A1, A2, A3, A4);}
+#define DBG_PRINTF2(STR, A1, A2) {printf(STR, A1, A2);}
+#define DBG_PRINTF3(STR, A1, A2, A3) {printf(STR, A1, A2, A3);}
+#define DBG_PRINTF4(STR, A1, A2, A3, A4) {printf(STR, A1, A2, A3, A4);}
 
 /*
  * CPU CLOCK TIMER
@@ -80,6 +84,16 @@
  * The clock counters are not thread-safe. Your program will not crash
  * and die and burn if you use clock macros in a parallel program,
  * but the numbers may be wrong be if clock macros are called in parallel.
+ *
+ * Usage:
+ *   DBG_CLOCK_RESET(N)
+ *   for(i = 0; i < large_number; i++) {
+ *     DBG_CLOCK_TOGGLE(N)
+ *     some_operations
+ *     DBG_CLOCK_TOGGLE(N)
+ *     other_operations
+ *   }
+ *   DBG_PRINTF1("CPU time spent in some_ops: %0.3fs\n", DBG_CLOCK_S(N));
  *
  * @todo OpenMP-aware clock timing
  */
@@ -144,9 +158,42 @@ static clock_t _dbg_clock_counter[DBG_CLOCK_NB];
  *
  * These macros are suitable to measure the CPU cost of a few
  * instructions, and should not be used when multitasking interrupts
- * the measure. For good results, repeat the measures many times, take
- * the median, and remove tke cost of the measure itself (median time
- * between two adjacent measures).
+ * the measure.
+ *
+ * Usage:
+ *   DBG_CYCLE_RESET(N)
+ *   for(i = 0; i < large_number; i++) {
+ *     DBG_CYCLE_STARTTOGGLE(N)
+ *     some_operations
+ *     DBG_CLOCK_TOGGLE(N)
+ *     other_operations
+ *   }
+ *   DBG_PRINTF1("Total CPU cycles spent in some_ops: %lld\n", DBG_CYCLE(N));
+ *
+ * For good results, repeat the measures many times, take the median,
+ * and remove the cost of the measure itself (median time between two
+ * adjacent measures).
+ *
+ * Usage (insert #ifdef to use the same code for debug and prod):
+ *   long long cycles[large_number];
+ *   for(i = 0; i < large_number; i++) {
+ *     DBG_CYCLE_START(N)
+ *     cycles[i] = DBG_CYCLE(N);
+ *   }
+ *   qsort(cycles, large_number, sizeof(long long), &cmp);
+ *   long long tmp = cycles[large_number / 2];
+ *   
+ *   for(i = 0; i < large_number; i++) {
+ *     DBG_CYCLE_START(N)
+ *     some_operations
+ *     cycles[i] = DBG_CYCLE(N);
+ *     other_operations
+ *   }
+ *   for(i = 0; i < large_number; i++)
+ *     cycles[i] -= tmp;
+ *   qsort(cycles, large_number, sizeof(long long), &cmp);
+ *   DBG_PRINTF1("Median CPU cycles spent in some_ops: %lld\n",
+ *               cycles[large_number / 2]);
  *
  * Theses macros are not for parallel programs. They are only
  * available on x86 and amd64 hardware.
@@ -223,9 +270,9 @@ static long long _dbg_cycle_counter[DBG_CYCLE_NB];
 
 #define DBG_PRINTF0(STR) {}
 #define DBG_PRINTF1(STR, A1) {}
-#define DBG_PRINTF2(STR, A1) {}
-#define DBG_PRINTF3(STR, A1) {}
-#define DBG_PRINTF4(STR, A1) {}
+#define DBG_PRINTF2(STR, A1, A2) {}
+#define DBG_PRINTF3(STR, A1, A2, A3) {}
+#define DBG_PRINTF4(STR, A1, A2, A3, A4) {}
 
 #define DBG_CLOCK_NB 0;
 #define DBG_CLOCK_RESET(N) {}

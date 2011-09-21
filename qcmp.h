@@ -41,12 +41,13 @@
  * - qcmp_dbl()    double
  */
 #define CAST(TYPE, X) (*(const TYPE *) X)
-#define QCMP(FUNC, TYPE)                                          \
-    static int FUNC(const void *a, const void *b) \
+#define QCMP(FUNC, TYPE)				  \
+    static int FUNC(const void *a, const void *b)	  \
     {                                                     \
         return (int) ((CAST(TYPE, a) > CAST(TYPE, b))     \
                       - (CAST(TYPE, a) < CAST(TYPE, b))); \
-    }
+    }							  \
+    static int FUNC(const void *a, const void *b)
 
 /**
  * unsigned integer comparison
@@ -56,9 +57,10 @@
  * qcmp_int()
  * qcmp_long()
  */
-
-QCMP(qcmp_char, char)
-QCMP(qcmpshrt, short) QCMP(qcmp_int, int) QCMP(qcmp_long, long)
+QCMP(qcmp_char, char);
+QCMP(qcmp_shrt, short);
+QCMP(qcmp_int, int);
+QCMP(qcmp_long, long);
 
 /**
  * unsigned integer comparison
@@ -68,17 +70,20 @@ QCMP(qcmpshrt, short) QCMP(qcmp_int, int) QCMP(qcmp_long, long)
  * qcmp_uint()
  * qcmp_ulong()
  */
-QCMP(qcmp_uchar, unsigned char)
-QCMP(qcmp_ushrt, unsigned short)
-QCMP(qcmp_uint, unsigned int) QCMP(qcmp_ulong, unsigned long)
+QCMP(qcmp_uchar, unsigned char);
+QCMP(qcmp_ushrt, unsigned short);
+QCMP(qcmp_uint, unsigned int);
+QCMP(qcmp_ulong, unsigned long);
 
 /**
- * unsigned integer comparison
+ * floating-point comparison
  *
  * qcmp_flt()
  * qcmp_dbl()
  */
-QCMP(qcmp_flt, float) QCMP(qcmp_dbl, double)
+QCMP(qcmp_flt, float);
+QCMP(qcmp_dbl, double);
+
 #undef QCMP
 #undef CAST
 #endif                          /* !_QCMP_H */

@@ -111,7 +111,7 @@ static unsigned long xtime()
     time_t rawtime;
     struct tm *t;
 
-    time(&rawtime);
+    (void) time(&rawtime);
     t = localtime(&rawtime);
 #define _ul unsigned long       /* temporary, for shorter lines */
     return (_ul) (1000 * ((_ul) t->tm_sec
