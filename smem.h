@@ -31,7 +31,7 @@
 /** @brief abort() wrapper macro with an error message */
 #define _ABORT(MSG) do {                                        \
     fprintf(stderr, "%s:%04u : %s\n", __FILE__, __LINE__, MSG); \
-    fflush(stderr);                                             \
+    fflush(NULL);						\
     abort();                                                    \
     } while (0);
 
