@@ -14,18 +14,17 @@
  */
 
 /**
- * @file xmem.h
+ * @file smem.h
  * @brief safe memory allocation
  *
- * This code comes from Enric Meinhardt's xmalloc()[1], following
- * further developments for io_png[2].
+ * This code comes from Enric Meinhardt's xmalloc()[1], with some
+ * additional tweaks.
  *
  * [1]http://tools.ipol.im/wiki/author/code/fragments_in_c/
- * [2]http://dev.ipol.im/git/?p=nil/io_png.git
  */
 
-#ifndef _XMEM_H
-#define _XMEM_H
+#ifndef _SMEM_H
+#define _SMEM_H
 
 #include <stdlib.h>
 
@@ -37,7 +36,7 @@
     } while (0);
 
 /** @brief safe malloc wrapper */
-static void *_xmalloc(size_t size)
+static void *_smalloc(size_t size)
 {
     void *memptr;
 
@@ -47,11 +46,11 @@ static void *_xmalloc(size_t size)
 }
 
 /** @brief safe malloc wrapper macro with safe casting */
-#define _XMALLOC(NB, TYPE)                                              \
-    ((TYPE *) _xmalloc((size_t) (NB) * sizeof(TYPE)))
+#define SMALLOC(NB, TYPE)                                              \
+    ((TYPE *) _smalloc((size_t) (NB) * sizeof(TYPE)))
 
 /** @brief safe realloc wrapper */
-static void *_xrealloc(void *memptr, size_t size)
+static void *_srealloc(void *memptr, size_t size)
 {
     void *newptr;
 
@@ -61,11 +60,11 @@ static void *_xrealloc(void *memptr, size_t size)
 }
 
 /** @brief safe realloc wrapper macro with safe casting */
-#define _XREALLOC(PTR, NB, TYPE)                             \
-    ((TYPE *) _xrealloc((void *) (PTR), (size_t) (NB) * sizeof(TYPE)))
+#define SREALLOC(PTR, NB, TYPE)                             \
+    ((TYPE *) _srealloc((void *) (PTR), (size_t) (NB) * sizeof(TYPE)))
 
 /** @brief safe calloc wrapper */
-static void *_xcalloc(size_t nb, size_t size)
+static void *_scalloc(size_t nb, size_t size)
 {
     void *memptr;
 
@@ -75,7 +74,7 @@ static void *_xcalloc(size_t nb, size_t size)
 }
 
 /** @brief safe calloc wrapper macro with safe casting */
-#define _XCALLOC(NB, TYPE)                      \
-    ((TYPE *) _xcalloc(NB, sizeof(TYPE))
+#define SCALLOC(NB, TYPE)                      \
+    ((TYPE *) _scalloc(NB, sizeof(TYPE))
 
-#endif                          /* !_XMEM_H */
+#endif                          /* !_SMEM_H */

@@ -5,7 +5,7 @@
 # the copyright notice and this notice are preserved.  This file is
 # offered as-is, without any warranty.
 
-HDR	= xstdint.h xtime.h debug.h qcmp.h xmem.h
+HDR	= debug.h tqsort.h xstdint.h xmtime.h smem.h
 SRC	= $(HDR:.h=.c)
 BIN	= $(SRC:.c=)
 

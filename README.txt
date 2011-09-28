@@ -2,26 +2,26 @@
 
 # OVERVIEW
 
-Cbits is a collection bits of C code, providing tiny tools and
+Hmisc is a collection bits of C code, providing tiny tools and
 facilities:
-
-xstdint.h:
-  Cross-platform definition of exact-width integers as defined in the
-  C99 standard but usable with C89.
-
-xtime.h:
-  Definition of a millisecond timer for Windows and POSIX. On other
-  systems, this precision timer is emulated with the standard libc
-  low-precision time functions.
 
 debug.h:
   NDEBUG-aware printf macros and routines to measure cycles and CPU
   time for profiling.
 
-qcmp.h:
-  Numerical comparison functions for qsort().
+tqsort.h:
+  Type-specific versions of qsort().
 
-xmem.h:
+xstdint.h:
+  Cross-platform definition of exact-width integers as defined in the
+  C99 standard but usable with C89.
+
+xmtime.h:
+  Cross-platform millisecond timer for Windows and POSIX. On other
+  systems, this precision timer is emulated with the standard libc
+  low-precision time functions.
+
+smem.h:
   Failsafe memory allocation.
 
 # LICENSE

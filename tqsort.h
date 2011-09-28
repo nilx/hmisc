@@ -14,7 +14,7 @@
  */
 
 /**
- * @file qcmp.h
+ * @file tqsort.h
  * @brief numeric comparison functions and type-safe shortcuts to qsort()
  *
  * @author Nicolas Limare <nicolas.limare@cmla.ens-cachan.fr>
@@ -22,25 +22,25 @@
  * @todo try some optimizations by bit twiddling
  */
 
-#ifndef _QCMP_H
-#define _QCMP_H
+#ifndef _TQSORT_H
+#define _TQSORT_H
 
 #include <stdlib.h>
 
 /**
  * macros to define similar functions:
- *   static int qcmp_XXX(const void *a, const void *b)
+ *   static int _qcmp_XXX(const void *a, const void *b)
  * where the suffix defines the type of the scalars to be compared:
- * - qcmp_char()   char
- * - qcmp_shrt()   short
- * - qcmp_int()    int
- * - qcmp_long()   long
- * - qcmp_uchar()  unsigned char
- * - qcmp_ushrt()  unsigned short
- * - qcmp_uint()   unsigned int
- * - qcmp_ulong()  unsigned long
- * - qcmp_flt()    float
- * - qcmp_dbl()    double
+ * - _qcmp_char()   char
+ * - _qcmp_shrt()   short
+ * - _qcmp_int()    int
+ * - _qcmp_long()   long
+ * - _qcmp_uchar()  unsigned char
+ * - _qcmp_ushrt()  unsigned short
+ * - _qcmp_uint()   unsigned int
+ * - _qcmp_ulong()  unsigned long
+ * - _qcmp_flt()    float
+ * - _qcmp_dbl()    double
  */
 /*
  * The last line it results in a declaration when QCMP(FOO, BAR); is
@@ -59,16 +59,16 @@
 /**
  * define all the qcmp variants
  */
-QCMP(qcmp_char, char);
-QCMP(qcmp_shrt, short);
-QCMP(qcmp_int, int);
-QCMP(qcmp_long, long);
-QCMP(qcmp_uchar, unsigned char);
-QCMP(qcmp_ushrt, unsigned short);
-QCMP(qcmp_uint, unsigned int);
-QCMP(qcmp_ulong, unsigned long);
-QCMP(qcmp_flt, float);
-QCMP(qcmp_dbl, double);
+QCMP(_qcmp_char, char);
+QCMP(_qcmp_shrt, short);
+QCMP(_qcmp_int, int);
+QCMP(_qcmp_long, long);
+QCMP(_qcmp_uchar, unsigned char);
+QCMP(_qcmp_ushrt, unsigned short);
+QCMP(_qcmp_uint, unsigned int);
+QCMP(_qcmp_ulong, unsigned long);
+QCMP(_qcmp_flt, float);
+QCMP(_qcmp_dbl, double);
 
 #undef QCMP
 #undef CAST
@@ -89,17 +89,17 @@ QCMP(qcmp_dbl, double);
 /**
  * define all the qsort variants
  */
-QSORT(qsort_char, qcmp_char, char);
-QSORT(qsort_shrt, qcmp_shrt, short);
-QSORT(qsort_int, qcmp_int, int);
-QSORT(qsort_long, qcmp_long, long);
-QSORT(qsort_uchar, qcmp_uchar, unsigned char);
-QSORT(qsort_ushrt, qcmp_ushrt, unsigned short);
-QSORT(qsort_uint, qcmp_uint, unsigned int);
-QSORT(qsort_ulong, qcmp_ulong, unsigned long);
-QSORT(qsort_flt, qcmp_flt, float);
-QSORT(qsort_dbl, qcmp_dbl, double);
+QSORT(qsort_char, _qcmp_char, char);
+QSORT(qsort_shrt, _qcmp_shrt, short);
+QSORT(qsort_int, _qcmp_int, int);
+QSORT(qsort_long, _qcmp_long, long);
+QSORT(qsort_uchar, _qcmp_uchar, unsigned char);
+QSORT(qsort_ushrt, _qcmp_ushrt, unsigned short);
+QSORT(qsort_uint, _qcmp_uint, unsigned int);
+QSORT(qsort_ulong, _qcmp_ulong, unsigned long);
+QSORT(qsort_flt, _qcmp_flt, float);
+QSORT(qsort_dbl, _qcmp_dbl, double);
 
 #undef QSORT
 
-#endif                          /* !_QCMP_H */
+#endif                          /* !_TQSORT_H */

@@ -15,22 +15,22 @@
  */
 
 /**
- * @file xtime.h
+ * @file xmtime.h
  *
- * Portable high-precision xtime() clock with millisecond precision.
+ * Portable high-precision xmtime() clock with millisecond precision.
  * On Windows or POSIX systems, native high-precision calls are
  * used. On other systems we use the standatd libc time() function
  * with very bad precision (1 second) and we set the macro
- * XTIME_LOW_PRECISION, but the code can still compile with calls to
- * xtime().
+ * XMTIME_LOW_PRECISION, but the code can still compile with calls to
+ * xmtime().
  *
  * This is the calendar time, so these measures will be influenced by
  * external factors such as the presence of other computing-intensive
  * processes, the disk access time, and multithreading.
  */
 
-#ifndef _XTIME_H_
-#define _XTIME_H_
+#ifndef _XMTIME_H_
+#define _XMTIME_H_
 
 /*
  * OS DETECTION
@@ -47,7 +47,7 @@
      || defined(__TOS_WIN__) || defined(__WINDOWS__))
 /* from http://predef.sourceforge.net/preos.html#sec25 */
 
-#define XTIME_WINDOWS
+#define XMTIME_WINDOWS
 
 #elif (defined(__unix__) || defined(__unix))
 /* from http://predef.sourceforge.net/preos.html#sec47 */
@@ -55,7 +55,7 @@
 #include <unistd.h>
 #if (defined(_POSIX_VERSION) && (_POSIX_VERSION >= 200112L))
 
-#define XTIME_POSIX
+#define XMTIME_POSIX
 
 #endif                          /* posix test */
 #endif                          /* windows/unix test */
@@ -64,14 +64,14 @@
  * OS-DEPENDANT IMPLEMENTATION
  */
 
-#if defined(XTIME_WINDOWS)      /* Windows implementation */
+#if defined(XMTIME_WINDOWS)     /* Windows implementation */
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 /**
  * @brief millisecond timer for Windows using GetSystemTime()
  */
-static unsigned long xtime()
+static unsigned long xmtime()
 {
     static SYSTEMTIME t;
     GetSystemTime(&t);
@@ -84,13 +84,13 @@ static unsigned long xtime()
 #undef _ul
 }
 
-#elif defined(XTIME_POSIX)      /* POSIX implementation */
+#elif defined(XMTIME_POSIX)     /* POSIX implementation */
 
 #include <sys/time.h>
 /**
  * @brief millisecond timer for POSIX using gettimeofday()
  */
-static unsigned long xtime()
+static unsigned long xmtime()
 {
     struct timeval t;
     gettimeofday(&t, NULL);
@@ -100,13 +100,13 @@ static unsigned long xtime()
 #else                           /* C89 libc implementation */
 
 #include <time.h>
-#define XTIME_LOW_PRECISION
+#define XMTIME_LOW_PRECISION
 /**
  * @brief pseudo-millisecond timer for C89 using time()
  *
  * This timer grows by increments of 1000 milliseconds.
  */
-static unsigned long xtime()
+static unsigned long xmtime()
 {
     time_t rawtime;
     struct tm *t;
@@ -123,4 +123,4 @@ static unsigned long xtime()
 
 #endif                          /* implementation selection */
 
-#endif                          /* !_XTIME_H_ */
+#endif                          /* !_XMTIME_H_ */
