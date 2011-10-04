@@ -20,8 +20,6 @@
  * If NDEBUG is defined at the time this header is included, the
  * macros are ignored.
  *
- * @todo allow ANSI C89 compilation (hide asm and long long)
- *
  * @author Nicolas Limare <nicolas.limare@cmla.ens-cachan.fr>
  */
 
@@ -151,8 +149,8 @@ static clock_t _dbg_clock_counter[DBG_CLOCK_NB];
  * Some CPU cycle counters are available and follow the same model as
  * the clock counters. Cycle counters are toggled on/off with
  * DBG_CYCLE_TOGGLE(N), with N between 0 and DBG_CYCLE_NB - 1.
- * Couters are reset with DBG_CYCLE_RESET(N) can be read (long long)
- * with DBG_CYCLE(N).
+ * Counters are reset with DBG_CYCLE_RESET(N) and can be read with
+ * DBG_CYCLE(N).
  *
  * These macros use the work of Daniel J. Bernstein:
  *   http://ebats.cr.yp.to/cpucycles.html
@@ -200,17 +198,27 @@ static clock_t _dbg_clock_counter[DBG_CLOCK_NB];
  * Theses macros are not for parallel programs. They are only
  * available on x86 and amd64 hardware.
  *
+ * When compiled on an ANSI C90 compiler, these cycle counter type is
+ * "long" instead of "long long".
+ *
  * @todo more architectures
  */
+
+#if (defined(__STDC__) && defined(__STDC_VERSION__) \
+     && (__STDC_VERSION__ >= 199409L))
+#define _LL long long
+#else
+#define _LL long
+#endif
 
 #if (defined(__amd64__) || defined(__amd64) || defined(_M_X64))
 /* from http://predef.sourceforge.net/prearch.html#sec3 */
 
 /** CPU cycles counter for x86 */
-static long long _dbg_cpucycles(void)
+static _LL _dbg_cpucycles(void)
 {
-    long long result;
-    asm volatile (".byte 15;.byte 49":"=A" (result));
+    _LL result;
+    __asm__ volatile (".byte 15;.byte 49":"=A" (result));
     return result;
 }
 
@@ -219,10 +227,10 @@ static long long _dbg_cpucycles(void)
 /* from http://predef.sourceforge.net/prearch.html#sec6 */
 
 /** CPU cycles counter for amd64 */
-static long long _dbg_cpucycles(void)
+static _LL _dbg_cpucycles(void)
 {
-    unsigned long long result;
-    asm volatile (".byte 15;.byte 49;shlq $32,%%rdx;orq %%rdx,%%rax":"=a"
+    unsigned _LL result;
+    __asm__ volatile (".byte 15;.byte 49;shlq $32,%%rdx;orq %%rdx,%%rax":"=a"
                   (result)::"%rdx");
     return result;
 }
@@ -230,7 +238,7 @@ static long long _dbg_cpucycles(void)
 #else
 
 /** dummy CPU cycles counter */
-static long long _dbg_cpucycles(void)
+static _LL _dbg_cpucycles(void)
 {
     return 0;
 }
@@ -241,7 +249,7 @@ static long long _dbg_cpucycles(void)
 #define DBG_CYCLE_NB 16
 
 /** cycle counter array, initialized to 0 */
-static long long _dbg_cycle_counter[DBG_CYCLE_NB];
+static _LL _dbg_cycle_counter[DBG_CYCLE_NB];
 
 /**
  * @brief reset a CPU cycle counter
