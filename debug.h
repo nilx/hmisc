@@ -18,7 +18,8 @@
  * @brief debugging and profiling macros
  *
  * If NDEBUG is defined at the time this header is included, the
- * macros are ignored.
+ * macros are ignored. We chose NDEBUG because this macro already
+ * cancels assert() statements in C89 (K&R2, p.254).
  *
  * @author Nicolas Limare <nicolas.limare@cmla.ens-cachan.fr>
  */
@@ -26,15 +27,14 @@
 #ifndef _DEBUG_H
 #define _DEBUG_H
 
-/* NDEBUG already cancels assert() statements in C89 (K&R2, p.254). */
-#ifndef NDEBUG
-
 #include <stdio.h>
 #include <time.h>
 
 /*
  * DEBUG MESSAGES
  */
+
+#ifndef NDEBUG
 
 /**
  * @brief printf()-like debug statements
@@ -51,6 +51,16 @@
 #define DBG_PRINTF2(STR, A1, A2) {printf(STR, A1, A2);}
 #define DBG_PRINTF3(STR, A1, A2, A3) {printf(STR, A1, A2, A3);}
 #define DBG_PRINTF4(STR, A1, A2, A3, A4) {printf(STR, A1, A2, A3, A4);}
+
+#else
+
+#define DBG_PRINTF0(STR) {}
+#define DBG_PRINTF1(STR, A1) {}
+#define DBG_PRINTF2(STR, A1, A2) {}
+#define DBG_PRINTF3(STR, A1, A2, A3) {}
+#define DBG_PRINTF4(STR, A1, A2, A3, A4) {}
+
+#endif                          /* !NDEBUG */
 
 /*
  * CPU CLOCK TIMER
@@ -98,6 +108,8 @@
  * @todo OpenMP-aware clock timing
  */
 
+#ifndef NDEBUG
+
 /** number of clock counters */
 #define DBG_CLOCK_NB 16
 
@@ -138,6 +150,17 @@ static clock_t _dbg_clock_counter[DBG_CLOCK_NB];
  * @brief CPU clock time in seconds
  */
 #define DBG_CLOCK_S(N) ((float) _dbg_clock_counter[N] / CLOCKS_PER_SEC)
+
+#else
+
+#define DBG_CLOCK_NB 0;
+#define DBG_CLOCK_RESET(N) {}
+#define DBG_CLOCK_TOGGLE(N) {}
+#define DBG_CLOCK_START(N) {}
+#define DBG_CLOCK(N) (-1)
+#define DBG_CLOCK_S(N) (-1.)
+
+#endif                          /* !NDEBUG */
 
 /*
  * CPU CYCLES COUNTER
@@ -203,6 +226,8 @@ static clock_t _dbg_clock_counter[DBG_CLOCK_NB];
  *
  * @todo more architectures
  */
+
+#ifndef NDEBUG
 
 #if (defined(__STDC__) && defined(__STDC_VERSION__) \
      && (__STDC_VERSION__ >= 199409L))
@@ -276,20 +301,9 @@ static _LL _dbg_cycle_counter[DBG_CYCLE_NB];
  */
 #define DBG_CYCLE(N) (_dbg_cycle_counter[N])
 
-#else                           /* !NDEBUG */
+#undef _LL
 
-#define DBG_PRINTF0(STR) {}
-#define DBG_PRINTF1(STR, A1) {}
-#define DBG_PRINTF2(STR, A1, A2) {}
-#define DBG_PRINTF3(STR, A1, A2, A3) {}
-#define DBG_PRINTF4(STR, A1, A2, A3, A4) {}
-
-#define DBG_CLOCK_NB 0;
-#define DBG_CLOCK_RESET(N) {}
-#define DBG_CLOCK_TOGGLE(N) {}
-#define DBG_CLOCK_START(N) {}
-#define DBG_CLOCK(N) (-1)
-#define DBG_CLOCK_S(N) (-1.)
+#else
 
 #define DBG_CYCLE_NB 0;
 #define DBG_CYCLE_RESET(N) {}
