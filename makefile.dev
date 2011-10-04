@@ -9,7 +9,10 @@
 DATE	= $(shell date -u +%Y%m%d)
 RELEASE_TAG   = 0.$(DATE)
 
-.PHONY	: lint beautify release
+.PHONY	: srcdoc lint beautify release
+# source documentation
+srcdoc	: $(HDR)
+	doxygen doc/doxygen.conf
 # code cleanup
 beautify	: $(HDR)
 	for FILE in $^; do \

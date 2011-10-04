@@ -82,6 +82,7 @@ clean	:
 	$(RM) xstdint
 	$(RM) $(SRC)
 distclean	: clean
+	$(RM) -r srcdoc
 
 ################################################
 # dev tasks
