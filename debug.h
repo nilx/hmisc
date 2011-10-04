@@ -20,6 +20,8 @@
  * If NDEBUG is defined at the time this header is included, the
  * macros are ignored.
  *
+ * @todo allow ANSI C89 compilation (hide asm and long long)
+ *
  * @author Nicolas Limare <nicolas.limare@cmla.ens-cachan.fr>
  */
 
