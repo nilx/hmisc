@@ -9,7 +9,7 @@
 DATE	= $(shell date -u +%Y%m%d)
 RELEASE_TAG   = 0.$(DATE)
 
-.PHONY	: srcdoc lint beautify release
+.PHONY	: srcdoc lint beautify test release
 # source documentation
 srcdoc	: $(HDR)
 	doxygen doc/doxygen.conf
@@ -29,6 +29,9 @@ lint	: $(SRC)
 		splint -ansi-lib -weak -fcnuse -varuse -I. $$FILE \
 		|| exit 1; done;
 	$(RM) *.plist
+# code tests
+test    : $(SRC) $(HDR)
+	sh -e test/run.sh && echo SUCCESS || ( echo ERROR; return 1)
 # release tarball
 release	: beautify lint test distclean
 	git archive --format=tar --prefix=$(PROJECT)-$(RELEASE_TAG)/ HEAD \
