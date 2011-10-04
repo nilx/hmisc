@@ -7,7 +7,6 @@
 
 HDR	= debug.h tqsort.h xstdint.h xmtime.h smem.h
 SRC	= $(HDR:.h=.c)
-BIN	= $(SRC:.c=)
 
 # default target: the test
 default: test
@@ -15,7 +14,7 @@ default: test
 # test program compilation
 %.c	: %.h
 	cp $< $@
-$(BIN)	: $(SRC)
+xstdint	: xstdint.c
 	$(CC) -D_XSTDINT_TEST $< -I. -o $@
 
 test	: xstdint.test
@@ -71,7 +70,7 @@ xstdint.test	:
 	@$(MAKE) -s CC="$(TCC) $(TCC_C89)" xstdint.cctest
 xstdint.cctest	:
 	@if [ $$(which $(CC)) ]; then \
-		($(MAKE) -s -B $(BIN) && ./$(BIN)) \
+		($(MAKE) -s -B xstdint && ./xstdint) \
 			&& echo passed: $(CC) \
 			|| echo FAILED: $(CC); \
 	fi
@@ -80,35 +79,11 @@ xstdint.cctest	:
 # cleanup
 .PHONY	: clean distclean
 clean	:
-	$(RM) $(BIN)
+	$(RM) xstdint
 	$(RM) $(SRC)
 distclean	: clean
 
 ################################################
-# extra tasks
-
-PROJECT	= cbits
-DATE	= $(shell date -u +%Y%m%d)
-RELEASE_TAG   = 0.$(DATE)
-
-.PHONY	: lint beautify release
-# code cleanup
-beautify	: $(HDR)
-	for FILE in $^; do \
-		expand $$FILE | sed 's/[ \t]*$$//' > $$FILE.$$$$ \
-		&& indent -kr -i4 -l78 -nut -nce -sob -sc \
-			$$FILE.$$$$ -o $$FILE \
-		&& rm $$FILE.$$$$; \
-	done
-# static code analysis
-lint	: $(SRC)
-#	for FILE in $^; do \
-#		clang --analyze -ansi -I. $$FILE || exit 1; done;
-	for FILE in $^; do \
-		splint -ansi-lib -weak -fcnuse -varuse -I. $$FILE \
-		|| exit 1; done;
-	$(RM) *.plist
-# release tarball
-release	: beautify lint test distclean
-	git archive --format=tar --prefix=$(PROJECT)-$(RELEASE_TAG)/ HEAD \
-	        | gzip > ../$(PROJECT)-$(RELEASE_TAG).tar.gz
+# dev tasks
+PROJECT	= hmish
+-include	makefile.dev
