@@ -27,6 +27,7 @@
 #define _SMEM_H
 
 #include <stdlib.h>
+#include <stdio.h>
 
 /** @brief abort() wrapper macro with an error message */
 #define _ABORT(MSG) do {                                        \
