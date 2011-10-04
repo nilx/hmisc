@@ -75,13 +75,13 @@ static unsigned long xmtime()
 {
     static SYSTEMTIME t;
     GetSystemTime(&t);
-#define _ul unsigned long       /* temporary, for shorter lines */
-    return (_ul) ((_ul) t.wMilliseconds
-                  + 1000 * ((_ul) t.wSecond
-                            + 60 * ((_ul) t.wMinute
-                                    + 60 * ((ul) t.wHour
-                                            + 24 * (_ul) t.wDay))));
-#undef _ul
+#define _UL unsigned long       /* temporary, for shorter lines */
+    return (_UL) ((_UL) t.wMilliseconds
+                  + 1000 * ((_UL) t.wSecond
+                            + 60 * ((_UL) t.wMinute
+                                    + 60 * ((_UL) t.wHour
+                                            + 24 * (_UL) t.wDay))));
+#undef _UL
 }
 
 #elif defined(XMTIME_POSIX)     /* POSIX implementation */
@@ -113,12 +113,12 @@ static unsigned long xmtime()
 
     (void) time(&rawtime);
     t = localtime(&rawtime);
-#define _ul unsigned long       /* temporary, for shorter lines */
-    return (_ul) (1000 * ((_ul) t->tm_sec
-                          + 60 * ((_ul) t->tm_min +
-                                  +60 * ((_ul) t->tm_hour +
-                                         +24 * (_ul) t->tm_mday))));
-#undef _ul
+#define _UL unsigned long       /* temporary, for shorter lines */
+    return (_UL) (1000 * ((_UL) t->tm_sec
+                          + 60 * ((_UL) t->tm_min +
+                                  +60 * ((_UL) t->tm_hour +
+                                         +24 * (_UL) t->tm_mday))));
+#undef _UL
 }
 
 #endif                          /* implementation selection */
