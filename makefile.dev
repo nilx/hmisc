@@ -10,9 +10,11 @@ DATE	= $(shell date -u +%Y%m%d)
 RELEASE_TAG   = 0.$(DATE)
 
 .PHONY	: srcdoc lint beautify test release
+
 # source documentation
 srcdoc	: $(HDR)
 	doxygen doc/doxygen.conf
+
 # code cleanup
 beautify	: $(HDR)
 	for FILE in $^; do \
@@ -21,7 +23,10 @@ beautify	: $(HDR)
 			$$FILE.$$$$ -o $$FILE \
 		&& rm $$FILE.$$$$; \
 	done
-# static code analysis
+
+# static code analysis and strict build
+CFLAGS_STRICT	= $(CFLAGS) -ansi -pedantic -Wall -Wextra -Werror \
+	-Wno-unused-function
 lint	: $(SRC)
 	for FILE in $^; do \
 		clang --analyze -ansi -I. $$FILE || exit 1; done;
@@ -29,9 +34,12 @@ lint	: $(SRC)
 		splint -ansi-lib -weak -fcnuse -varuse -I. $$FILE \
 		|| exit 1; done;
 	$(RM) *.plist
+	$(MAKE) -B CFLAGS="$(CFLAGS_STRICT)"
+
 # code tests
 test    : $(SRC) $(HDR)
 	sh -e test/run.sh && echo SUCCESS || ( echo ERROR; return 1)
+
 # release tarball
 release	: beautify lint test distclean
 	git archive --format=tar --prefix=$(PROJECT)-$(RELEASE_TAG)/ HEAD \

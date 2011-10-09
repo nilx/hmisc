@@ -14,11 +14,11 @@ _log_init
 echo "* default build, test, clean, rebuild"
 #_log make -B debug
 _log _test_run
-_log make -B
+_log make -B CFLAGS="-ansi"
 _log _test_run
-_log make
+_log make CFLAGS="-ansi"
 _log make clean
-_log make
+_log make CFLAGS="-ansi"
 
 echo "* compiler support"
 #for CC in cc c++ c99 gcc g++ tcc nwcc clang icc pathcc suncc \
@@ -29,7 +29,7 @@ for CC in c99 tcc nwcc clang suncc i586-mingw32msvc-cc; do
     _log make distclean
     case $CC in
 	"gcc"|"g++")
-	    _log make CC=$CC ;;
+	    _log make CC=$CC CFLAGS="-ansi";;
 	*)
 	    _log make CC=$CC CFLAGS= ;;
     esac

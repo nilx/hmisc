@@ -14,10 +14,10 @@ OBJ	= $(HDR:.h=.o)
 # test program
 BIN	= hmisc
 
-# standard C compiler optimization options
+# C compiler optimization options
 COPT    =
 # complete C compiler options
-CFLAGS  = -ansi -pedantic -Wall -Wextra -pipe $(COPT)
+CFLAGS  = $(COPT)
 # preprocessor options
 CPPFLAGS        = -DNDEBUG -D_XSTDINT_TEST
 
