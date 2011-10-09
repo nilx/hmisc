@@ -8,36 +8,41 @@
 # headers
 HDR	= debug.h tqsort.h xstdint.h xmtime.h smem.h
 # pseudo-source code
-SRC	= $(HDR:.h=.c)
+SRC	= $(addprefix example/, $(HDR:.h=.c))
 # object code
-OBJ	= $(HDR:.h=.o)
-# test program
-BIN	= hmisc
+OBJ	= $(SRC:.c=.o)
+# binary executable programs
+BIN	= $(filter example/%, $(SRC:.c=))
 
 # C compiler optimization options
 COPT    =
 # complete C compiler options
 CFLAGS  = $(COPT)
 # preprocessor options
-CPPFLAGS        = -DNDEBUG -D_XSTDINT_TEST
+CPPFLAGS        = -I. -DNDEBUG
+# linker options
+LDFLAGS	= -lm
 
 # default target: the test tools
 default: $(BIN)
 
-# .h->.c conversion
-%.c	: %.h
-	cp $< $@
 # partial C compilation xxx.c -> xxx.o
-%.o     : %.c
+%.o	: %.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
-# final link
-hmisc	: $(OBJ)
+
+# special case
+C89	?= c89
+example/xstdint.o	: example/xstdint.c
+	$(C89) -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
+
+# final link of an example program
+example/%	: example/%.o
 	$(CC) $^ $(LDFLAGS) -o $@
 
 # cleanup
 .PHONY  : clean distclean
 clean   :
-	$(RM) $(SRC) $(OBJ) *.plist
+	$(RM) $(OBJ) *.plist
 distclean       : clean
 	$(RM) $(BIN)
 	$(RM) -r srcdoc

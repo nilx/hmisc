@@ -30,52 +30,60 @@
 #include <stdio.h>
 
 /** @brief abort() wrapper macro with an error message */
-#define _ABORT(MSG) do {                                        \
-    fprintf(stderr, "%s:%04u : %s\n", __FILE__, __LINE__, MSG); \
-    fflush(NULL);                                               \
-    abort();                                                    \
+#define _ABORT() do {					\
+    fputs("not enough memory\n", stderr);		\
+    fflush(NULL);                                       \
+    abort();                                            \
     } while (0);
 
-/** @brief safe malloc wrapper */
+/** @brief safe malloc() wrapper */
 static void *_smalloc(size_t size)
 {
     void *memptr;
 
     if (NULL == (memptr = malloc(size)))
-        _ABORT("not enough memory");
+        _ABORT();
     return memptr;
 }
 
-/** @brief safe malloc wrapper macro with safe casting */
-#define SMALLOC(NB, TYPE)                                              \
+/** @brief safe malloc() wrapper macro with safe casting */
+#define SMALLOC(NB, TYPE)				\
     ((TYPE *) _smalloc((size_t) (NB) * sizeof(TYPE)))
 
-/** @brief safe realloc wrapper */
+/** @brief safe free() wrapper macro */
+#define SFREE(PTR) do {				\
+    if (NULL != PTR) {  			\
+	free(PTR);				\
+        PTR = NULL;				\
+        }					\
+    } while (0);
+
+/** @brief safe realloc() wrapper */
 static void *_srealloc(void *memptr, size_t size)
 {
     void *newptr;
 
     if (NULL == (newptr = realloc(memptr, size)))
-        _ABORT("not enough memory");
+        _ABORT();
     return newptr;
 }
 
-/** @brief safe realloc wrapper macro with safe casting */
-#define SREALLOC(PTR, NB, TYPE)                             \
+/** @brief safe realloc() wrapper macro with safe casting */
+#define SREALLOC(PTR, NB, TYPE)						\
     ((TYPE *) _srealloc((void *) (PTR), (size_t) (NB) * sizeof(TYPE)))
 
-/** @brief safe calloc wrapper */
+/** @brief safe calloc() wrapper */
 static void *_scalloc(size_t nb, size_t size)
 {
     void *memptr;
 
     if (NULL == (memptr = calloc(nb, size)))
-        _ABORT("not enough memory");
+        _ABORT();
     return memptr;
 }
 
-/** @brief safe calloc wrapper macro with safe casting */
+/** @brief safe calloc() wrapper macro with safe casting */
 #define SCALLOC(NB, TYPE)                      \
-    ((TYPE *) _scalloc(NB, sizeof(TYPE))
+    ((TYPE *) _scalloc(NB, sizeof(TYPE)))
 
 #endif                          /* !_SMEM_H */

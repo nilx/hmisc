@@ -43,7 +43,7 @@
  * - _qcmp_dbl()    double
  */
 /*
- * The last line it results in a declaration when QCMP(FOO, BAR); is
+ * The last line results in a declaration when QCMP(FOO, BAR); is
  * expanded. This is not really useful, but it maintains a correct
  * indentation when processing the source with the indent program.
  */

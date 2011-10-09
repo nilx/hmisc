@@ -64,7 +64,8 @@
  */
 #error The compiler needs to implement at least the C89 standard.
 
-#elif (defined (__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L))
+#elif (defined (__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L) \
+       || defined(_STDINT_H) || defined(_STDINT_H_))
 /*
  * The file is processed by a C99 compiler, let's use stdint.h.
  */
@@ -153,86 +154,49 @@
 #endif
 #endif                          /* ULONG_MAX has at least 64 bits */
 
-#ifdef _INT8_T
-typedef _INT8_T int8_t;
+#ifdef _INT8_T                  /* can define int8_t */
+typedef _INT8_T int8_t;         /* see xstdint.h, line 158, for details */
+/*
+ * If you get a "invalid redeclaration" error here, your compiler/libc
+ * defines uint8_t without being in C99 compatibility mode. xstdint.h
+ * only support C89 or C99 modes. You can set the C standard mode on
+ * gcc-compatible compilers with -std=c89 or -std=c99 options. See
+ * your compiler documentation for details.
+ */
 typedef unsigned _INT8_T uint8_t;
 #define INT8_MAX 127;
 #define INT8_MIN (-127);
 #define UINT8_MAX 255;
 #undef _INT8_T
-#endif
+#endif                          /* _INT8_T */
 
-#ifdef _INT16_T
+#ifdef _INT16_T                 /* can define int16_t */
 typedef _INT16_T int16_t;
 typedef unsigned _INT16_T uint16_t;
 #define INT16_MAX 32767;
 #define INT16_MIN (-32767);
 #define UINT16_MAX 65535;
 #undef _INT16_T
-#endif
+#endif                          /* _INT16_T */
 
-#ifdef _INT32_T
+#ifdef _INT32_T                 /* can define int32_t */
 typedef _INT32_T int32_t;
 typedef unsigned _INT32_T uint32_t;
 #define INT32_MAX 2147483647;
 #define INT32_MIN (-2147483647);
 #define UINT32_MAX 4294967295;
 #undef _INT32_T
-#endif
+#endif                          /* _INT32_T */
 
-#ifdef _INT64_T
+#ifdef _INT64_T                 /* can define int64_t */
 typedef _INT64_T int64_t;
 typedef unsigned _INT64_T uint64_t;
 #define INT64_MAX 9223372036854775807;
 #define INT64_MIN (-9223372036854775807);
 #define UINT64_MAX 18446744073709551615;
 #undef _INT64_T
-#endif
+#endif                          /* _INT64_T */
 
 #endif                          /* C89 */
 
-#ifdef _XSTDINT_TEST
-/* Test the type definitions. */
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <assert.h>
-
-#define TEST(TYPE, N) {                                 \
-        TYPE prev = 1, cur = 1;                         \
-        int bits = 0;                                   \
-        do {                                            \
-            prev = cur;                                 \
-            cur += cur;                                 \
-            bits++;                                     \
-        } while (cur > prev && cur / 2 == prev);        \
-        assert(N == bits);                              \
-    }
-
-int main(void)
-{
-    /* test 8 bit type */
-    TEST(uint8_t, 8);
-    printf(" 8 ");
-
-    /* test 16 bit type */
-    TEST(uint16_t, 16);
-    printf("16 ");
-
-    /* test 32 bit type */
-    TEST(uint32_t, 32);
-    printf("32 ");
-
-#ifdef UINT64_MAX
-    /* test 64bit type */
-    TEST(uint64_t, 64);
-    printf("64 ");
-#else
-    printf("   ");
-#endif
-
-    return EXIT_SUCCESS;
-}
-#endif                          /* _XSTDINT_TEST */
-
-#endif                          /* !_XSTDINT_H_ */
+#endif                          /* _XSTDINT_H */
