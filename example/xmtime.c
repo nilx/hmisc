@@ -28,10 +28,10 @@ int main()
      */
     printf("compute PI...\n");
     for (i = 0; i < 1024 * 1024; i++)
-	pi += (4. / (8. * i + 1.)
-	       - 2. / (8. * i + 4)
-	       - 1. / (8. * i + 5)
-	       - 1. / (8. * i + 6)) / pow(16, i);
+        pi += (4. / (8. * i + 1.)
+               - 2. / (8. * i + 4)
+               - 1. / (8. * i + 5)
+               - 1. / (8. * i + 6)) / pow(16, i);
     printf("PI = %1.16f\n", pi);
 
     /* measure the elapsed time */

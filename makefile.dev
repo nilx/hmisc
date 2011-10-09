@@ -12,11 +12,11 @@ RELEASE_TAG   = 0.$(DATE)
 .PHONY	: srcdoc lint beautify test release
 
 # source documentation
-srcdoc	: $(HDR)
+srcdoc	: $(SRC) $(HDR)
 	doxygen doc/doxygen.conf
 
 # code cleanup
-beautify	: $(HDR)
+beautify	: $(SRC) $(HDR)
 	for FILE in $^; do \
 		expand $$FILE | sed 's/[ \t]*$$//' > $$FILE.$$$$ \
 		&& indent -kr -i4 -l78 -nut -nce -sob -sc \
