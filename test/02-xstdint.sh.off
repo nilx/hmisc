@@ -12,7 +12,7 @@ _log_init
 
 echo "* xstdint"
 
-for CC in cc c++ c99 gcc g++ tcc nwcc clang icc pathcc suncc \
+for CC in cc c++ c89 c99 gcc g++ tcc nwcc clang icc pathcc suncc \
     i586-mingw32msvc-cc; do
     which $CC || continue
     echo "* $CC compiler"
@@ -54,7 +54,7 @@ for CC in cc c++ c99 gcc g++ tcc nwcc clang icc pathcc suncc \
 	    _test_xstdint
 	    ;;
 	"tcc")
-	    #no c99, no arch selection
+	    #no C99, no arch selection
 	    _log make -B CC=$CC CFLAGS=
 	    _test_xstdint
 	    ;;

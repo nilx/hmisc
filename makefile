@@ -30,11 +30,6 @@ default: $(BIN)
 %.o	: %.c
 	$(CC) -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
 
-# special case
-C89	?= c89
-example/xstdint.o	: example/xstdint.c
-	$(C89) -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
-
 # final link of an example program
 example/%	: example/%.o
 	$(CC) $^ $(LDFLAGS) -o $@

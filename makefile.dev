@@ -36,6 +36,11 @@ lint	: $(SRC)
 	$(RM) *.plist
 	$(MAKE) -B CFLAGS="$(CFLAGS_STRICT)"
 
+# debug build
+debug	: $(SRC)
+	$(MAKE) CFLAGS="$(CFLAGS) -g" \
+		CPPFLAGS="$(CPPFLAGS) -UNDEBUG" LDFLAGS="$(LDFLAGS) -lefence"
+
 # code tests
 test    : $(SRC) $(HDR)
 	sh -e test/run.sh && echo SUCCESS || ( echo ERROR; return 1)

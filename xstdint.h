@@ -65,7 +65,8 @@
 #error The compiler needs to implement at least the C89 standard.
 
 #elif (defined (__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L) \
-       || defined(_STDINT_H) || defined(_STDINT_H_))
+       || defined(_STDINT_H) || defined(_STDINT_H_) \
+       || defined(__int8_t_defined)) /* glibc specific */
 /*
  * The file is processed by a C99 compiler, let's use stdint.h.
  */
@@ -155,45 +156,46 @@
 #endif                          /* ULONG_MAX has at least 64 bits */
 
 #ifdef _INT8_T                  /* can define int8_t */
-typedef _INT8_T int8_t;         /* see xstdint.h, line 158, for details */
+typedef _INT8_T int8_t;         /* see the source code for error help */
 /*
- * If you get a "invalid redeclaration" error here, your compiler/libc
- * defines uint8_t without being in C99 compatibility mode. xstdint.h
- * only support C89 or C99 modes. You can set the C standard mode on
- * gcc-compatible compilers with -std=c89 or -std=c99 options. See
- * your compiler documentation for details.
+ * If you get an error here, your compiler/libc defines uint8_t
+ * without being in C99 compatibility mode.
+ * xstdint.h needs an unambiguous C89 or C99 compilation mode.
+ * You can set the C standard mode on gcc-compatible compilers with
+ * -std=c89 or -std=c99 options. See your compiler documentation for
+ * details.
  */
 typedef unsigned _INT8_T uint8_t;
-#define INT8_MAX 127;
-#define INT8_MIN (-127);
-#define UINT8_MAX 255;
+#define INT8_MAX 127
+#define INT8_MIN (-127)
+#define UINT8_MAX 255
 #undef _INT8_T
 #endif                          /* _INT8_T */
 
 #ifdef _INT16_T                 /* can define int16_t */
 typedef _INT16_T int16_t;
 typedef unsigned _INT16_T uint16_t;
-#define INT16_MAX 32767;
-#define INT16_MIN (-32767);
-#define UINT16_MAX 65535;
+#define INT16_MAX 32767
+#define INT16_MIN (-32767)
+#define UINT16_MAX 65535
 #undef _INT16_T
 #endif                          /* _INT16_T */
 
 #ifdef _INT32_T                 /* can define int32_t */
 typedef _INT32_T int32_t;
 typedef unsigned _INT32_T uint32_t;
-#define INT32_MAX 2147483647;
-#define INT32_MIN (-2147483647);
-#define UINT32_MAX 4294967295;
+#define INT32_MAX 2147483647
+#define INT32_MIN (-2147483647)
+#define UINT32_MAX 4294967295
 #undef _INT32_T
 #endif                          /* _INT32_T */
 
 #ifdef _INT64_T                 /* can define int64_t */
 typedef _INT64_T int64_t;
 typedef unsigned _INT64_T uint64_t;
-#define INT64_MAX 9223372036854775807;
-#define INT64_MIN (-9223372036854775807);
-#define UINT64_MAX 18446744073709551615;
+#define INT64_MAX 9223372036854775807
+#define INT64_MIN (-9223372036854775807)
+#define UINT64_MAX 18446744073709551615
 #undef _INT64_T
 #endif                          /* _INT64_T */
 
