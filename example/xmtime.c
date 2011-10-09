@@ -12,7 +12,7 @@
 int main()
 {
     unsigned long timer;
-    size_t i, j;
+    size_t i;
     double pi = 0.;
 
     /* measure the initial time */
@@ -31,13 +31,13 @@ int main()
         pi += (4. / (8. * i + 1.)
                - 2. / (8. * i + 4)
                - 1. / (8. * i + 5)
-               - 1. / (8. * i + 6)) / pow(16, i);
+               - 1. / (8. * i + 6)) / pow(16, (double) i);
     printf("PI = %1.16f\n", pi);
 
     /* measure the elapsed time */
     timer = xmtime() - timer;
     printf("elapsed time is %lums\n", timer);
-    printf("elapsed time is %0.3fs\n", timer / 1000.);
+    printf("elapsed time is %0.3fs\n", (double) (timer / 1000.));
 
     return EXIT_SUCCESS;
 }

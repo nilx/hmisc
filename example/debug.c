@@ -19,7 +19,7 @@ static int cmp(const void *a, const void *b)
 
 int main(void)
 {
-    size_t i, j;
+    size_t i;
     double pi;
 #ifndef NDEBUG
     long cycles[LOOP_SIZE];
@@ -43,7 +43,7 @@ int main(void)
         pi += (4. / (8. * i + 1.)
                - 2. / (8. * i + 4)
                - 1. / (8. * i + 5)
-               - 1. / (8. * i + 6)) / pow(16, i);
+               - 1. / (8. * i + 6)) / pow(16, (double) i);
     DBG_CLOCK_TOGGLE(0);
     printf("PI = %1.16f\n", pi);
     DBG_PRINTF1("total CPU time spent : %0.3fs\n", DBG_CLOCK_S(0));
@@ -56,7 +56,7 @@ int main(void)
         pi += (4. / (8. * i + 1.)
                - 2. / (8. * i + 4)
                - 1. / (8. * i + 5)
-               - 1. / (8. * i + 6)) / pow(16, i);
+               - 1. / (8. * i + 6)) / pow(16, (double) i);
     DBG_CYCLE_TOGGLE(0);
     printf("PI = %1.16f\n", pi);
     DBG_PRINTF1("total CPU cycles spent : %ld\n", DBG_CYCLE(0));
@@ -79,7 +79,7 @@ int main(void)
         pi += (4. / (8. * i + 1.)
                - 2. / (8. * i + 4)
                - 1. / (8. * i + 5)
-               - 1. / (8. * i + 6)) / pow(16, i);
+               - 1. / (8. * i + 6)) / pow(16, (double) i);
         DBG_CYCLE_TOGGLE(0);
 #ifndef NDEBUG
         cycles[i] = DBG_CYCLE(0);
