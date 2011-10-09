@@ -19,7 +19,7 @@
  *
  * @author Nicolas Limare <nicolas.limare@cmla.ens-cachan.fr>
  *
- * @todo try some optimizations by bit twiddling
+ * @todo try some optimizations by bit twiddling and type punning
  */
 
 #ifndef _TQSORT_H
