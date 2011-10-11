@@ -45,6 +45,8 @@ Add other bits of code:
   cf. http://tools.ipol.im/wiki/author/code/fragments_in_c/)
 - mt.h: mersenne twister, from http://dev.ipol.im/git/?p=nil/mt.git
 - bit twiddling, cf. http://bits.stephan-brumme.com/
+- strops.h: string operations
+- snprintf.h: poor man's snprintf()
 
 # ABOUT THIS FILE
 

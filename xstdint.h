@@ -66,7 +66,7 @@
 
 #elif (defined (__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L) \
        || defined(_STDINT_H) || defined(_STDINT_H_) \
-       || defined(__int8_t_defined)) /* glibc specific */
+       || defined(__int8_t_defined))    /* glibc specific */
 /*
  * The file is processed by a C99 compiler, let's use stdint.h.
  */
