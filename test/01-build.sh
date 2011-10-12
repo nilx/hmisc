@@ -9,6 +9,7 @@ _test_run() {
     ./example/tqsort
     ./example/xmtime
     ./example/xstdint
+    ./example/str
 }
 
 ################################################

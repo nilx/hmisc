@@ -6,7 +6,7 @@
 # offered as-is, without any warranty.
 
 # headers
-HDR	= debug.h tqsort.h xstdint.h xmtime.h smem.h
+HDR	= debug.h tqsort.h xstdint.h xmtime.h smem.h str.h
 # pseudo-source code
 SRC	= $(addprefix example/, $(HDR:.h=.c))
 # object code
