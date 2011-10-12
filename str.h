@@ -24,6 +24,9 @@
 #ifndef _STR_H_
 #define _STR_H_
 
+/* splint config */
+/*@ -fcnuse -varuse @*/
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -113,5 +116,7 @@ static char *str_tolower(char *str)
 
     return str;
 }
+
+/*@ =fcnuse =varuse @*/
 
 #endif                          /* !_STR_H_ */

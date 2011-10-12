@@ -26,6 +26,9 @@
 #ifndef _SMEM_H
 #define _SMEM_H
 
+/* splint config */
+/*@ -fcnuse -varuse @*/
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -85,5 +88,7 @@ static void *_scalloc(size_t nb, size_t size)
 /** @brief safe calloc() wrapper macro with safe casting */
 #define SCALLOC(NB, TYPE)                      \
     ((TYPE *) _scalloc(NB, sizeof(TYPE)))
+
+/*@ =fcnuse =varuse @*/
 
 #endif                          /* !_SMEM_H */

@@ -25,6 +25,9 @@
 #ifndef _TQSORT_H
 #define _TQSORT_H
 
+/* splint config */
+/*@ -fcnuse -varuse @*/
+
 #include <stdlib.h>
 
 /**
@@ -101,5 +104,7 @@ QSORT(qsort_flt, _qcmp_flt, float);
 QSORT(qsort_dbl, _qcmp_dbl, double);
 
 #undef QSORT
+
+/*@ =fcnuse =varuse @*/
 
 #endif                          /* !_TQSORT_H */

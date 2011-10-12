@@ -57,6 +57,9 @@
 #ifndef _XSTDINT_H_
 #define _XSTDINT_H_
 
+/* splint config */
+/*@ -fcnuse -varuse @*/
+
 #if (! defined(__STDC__))
 /*
  * The compiler is not C89 compatible, we can't expect any reliable
@@ -200,5 +203,7 @@ typedef unsigned _INT64_T uint64_t;
 #endif                          /* _INT64_T */
 
 #endif                          /* C89 */
+
+/*@ =fcnuse =varuse @*/
 
 #endif                          /* _XSTDINT_H */

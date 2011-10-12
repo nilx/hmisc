@@ -32,6 +32,9 @@
 #ifndef _XMTIME_H_
 #define _XMTIME_H_
 
+/* splint config */
+/*@ -fcnuse -varuse @*/
+
 /*
  * OS DETECTION
  */
@@ -122,5 +125,7 @@ static unsigned long xmtime()
 }
 
 #endif                          /* implementation selection */
+
+/*@ =fcnuse =varuse @*/
 
 #endif                          /* !_XMTIME_H_ */
