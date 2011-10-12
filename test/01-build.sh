@@ -5,7 +5,7 @@
 # Nothing to test yet
 _test_run() {
     ./example/debug
-    ./example/smem || true 
+    ./example/smem
     ./example/tqsort
     ./example/xmtime
     ./example/xstdint

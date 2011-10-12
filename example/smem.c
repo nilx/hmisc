@@ -37,9 +37,11 @@ int main()
     ptr = SCALLOC(1024, float);
     printf("ptr = %p\n", (void *) ptr);
 
-    /* ask for too much memory ~ 4G */
+#ifdef REMOVE_THIS_TO_MAKE_THE_PROGRAM_FAIL
+    /* this would trigger an abort(), askinbg for too much memory ~ 4G */
     ptr = SREALLOC(ptr, 1024 * 1024 * 1024, float);
     printf("ptr = %p\n", (void *) ptr);
+#endif
 
     return EXIT_SUCCESS;
 }
