@@ -55,10 +55,8 @@ static void *_smalloc(size_t size)
 
 /** @brief safe free() wrapper macro */
 #define SFREE(PTR) do {                         \
-    if (NULL != PTR) {                          \
-        free(PTR);                              \
-        PTR = NULL;                             \
-        }                                       \
+    free(PTR);                                  \
+    PTR = NULL;					\
     } while (0);
 
 /** @brief safe realloc() wrapper */

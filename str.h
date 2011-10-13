@@ -117,6 +117,14 @@ static char *str_tolower(char *str)
     return str;
 }
 
+/**
+ * @brief match at the end of a string
+ */
+static int str_endswith(const char *str, const char *match)
+{
+    return (0 == strcmp(match, str + strlen(str) - strlen(match)));
+}
+
 /*@ =fcnuse =varuse @*/
 
 #endif                          /* !_STR_H_ */
