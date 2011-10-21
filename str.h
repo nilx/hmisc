@@ -38,8 +38,50 @@
 #define EOL '\n'
 #endif
 
+#define MAX(A, B) ((A) > (B) ? (A) : (B))
+
 /**
- * @sbrief split a string in 2 parts
+ * @brief split a string at the first or last occurence of a char
+ */
+static void _str_split2(const char *str, char sep,
+                        char *pfx, char *sfx, int first)
+{
+    const char *bgn, *mid, *end;
+    size_t len;
+
+    bgn = str;
+    end = str + strlen(str);
+    mid = (first ? strchr(str, sep) : strrchr(str, sep));
+
+    if (NULL == mid) {
+        /* separator not found, copy str to pfx, empty sfx */
+        if (NULL != pfx)
+            strcpy(pfx, str);
+        if (NULL != sfx)
+            sfx[0] = '\0';
+        return;
+    }
+
+    /* get the prefix */
+    if (NULL != pfx) {
+        len = (size_t) MAX(mid - bgn, 0);
+        strncpy(pfx, bgn, len);
+        pfx[len] = EOS;
+    }
+
+    /* get the suffix */
+    mid += 1;
+    if (NULL != sfx) {
+        len = (size_t) MAX(end - mid, 0);
+        strncpy(sfx, mid, len);
+        sfx[len] = EOS;
+    }
+
+    return;
+}
+
+/**
+ * @sbrief split a string at the first occurence of a char
  *
  * pfx and sfx must be already allocated to input string length +1,
  * or NULL (and ignored)
@@ -50,30 +92,25 @@
  */
 static void str_split2(const char *str, char sep, char *pfx, char *sfx)
 {
-    const char *start, *stop;
+    int first = 1;
+    _str_split2(str, sep, pfx, sfx, first);
+    return;
+}
 
-    /* get the prefix */
-    start = str;
-    stop = strchr(str, sep);
-    if (NULL == stop)
-        /* separator not found, get the whole string */
-        stop = str + strlen(str);
-    if (NULL != pfx) {
-        strncpy(pfx, start, (size_t) (stop - start));
-        pfx[stop - start] = '\0';
-    }
-
-    /* get the suffix */
-    start = stop + 1;
-    stop = str + strlen(str);
-    if (stop < start)
-        /* no separator */
-        stop = start;
-    if (NULL != sfx) {
-        strncpy(sfx, start, (size_t) (stop - start));
-        sfx[stop - start] = '\0';
-    }
-
+/**
+ * @sbrief split a string at the last occurence of a char
+ *
+ * pfx and sfx must be already allocated to input string length +1,
+ * or NULL (and ignored)
+ *
+ * @param str string to split
+ * @param sep separator character
+ * @param pfx sfx prefix and suffix string pointers
+ */
+static void str_rsplit2(const char *str, char sep, char *pfx, char *sfx)
+{
+    int first = 0;
+    _str_split2(str, sep, pfx, sfx, first);
     return;
 }
 
