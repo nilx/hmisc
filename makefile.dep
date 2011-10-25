@@ -1,0 +1,6 @@
+debug.o: example/debug.c debug.h
+tqsort.o: example/tqsort.c tqsort.h
+xstdint.o: example/xstdint.c xstdint.h
+xmtime.o: example/xmtime.c xmtime.h
+smem.o: example/smem.c smem.h
+str.o: example/str.c str.h

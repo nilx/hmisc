@@ -21,18 +21,25 @@ CFLAGS  = $(COPT)
 # preprocessor options
 CPPFLAGS        = -I. -DNDEBUG
 # linker options
-LDFLAGS	= -lm
+LDFLAGS	=
+# libraries
+LDLIBS	= -lm
 
 # default target: the test tools
 default: $(BIN)
 
+# dependencies
+-include makefile.dep
+makefile.dep    : $(SRC)
+	$(CC) $(CPPFLAGS) -MM $^ > $@
+
 # partial C compilation xxx.c -> xxx.o
 %.o	: %.c
-	$(CC) -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
 # final link of an example program
 example/%	: example/%.o
-	$(CC) $^ $(LDFLAGS) -o $@
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 # cleanup
 .PHONY  : clean distclean
