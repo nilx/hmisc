@@ -13,6 +13,10 @@ CSTRICT	= -ansi -pedantic -Wall -Wextra -Werror -Wno-unused-function
 
 .PHONY	: srcdoc lint beautify test release
 
+# dependencies
+makefile.dep    : $(SRC)
+	$(CC) $(CPPFLAGS) -MM $^ > $@
+
 # source documentation
 srcdoc	: $(SRC) $(HDR)
 	doxygen doc/doxygen.conf
